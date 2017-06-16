@@ -18,6 +18,7 @@
 
 namespace classicprison;
 
+use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\event\player\PlayerDeathEvent;
@@ -70,5 +71,12 @@ class ClassicPrisonListener implements Listener {
 		$player = $event->getPlayer();
 		$player->kill();
 	}
+
+	public function onBlockBreak(BlockBreakEvent $event) {
+	    $drops = $event->getDrops();
+	    $player = $event->getPlayer();
+	    $player->getInventory()->addItem($drops);
+	    $event->setDrops([]);
+    }
 
 }

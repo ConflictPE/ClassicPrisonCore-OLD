@@ -1,7 +1,7 @@
 [
   {
     "name": "&e» &lSecluded Beach&r&e «&r",
-    "pos": "7, 33, -19",
+    "pos": "7, 33, -19, world",
     "skin-file": "forgotten_lands_npc.skin",
     "yaw": 180,
     "pitch": 2,
@@ -13,7 +13,7 @@
     }
   }, {
     "name": "&e» &lDesert Reef&r&e «&r",
-    "pos": "12, 33, -15",
+    "pos": "12, 33, -15, world",
     "skin-file": "end_npc.skin",
     "yaw": 180,
     "pitch": 2,
@@ -25,7 +25,7 @@
     }
   }, {
     "name": "&e» &lForgotten Keep&r&e «&r",
-    "pos": "-11, 33, -15",
+    "pos": "-11, 33, -15, world",
     "skin-file": "highlands_road_npc.skin",
     "yaw": 180,
     "pitch": 2,
@@ -37,7 +37,7 @@
     }
   }, {
     "name": "&e» &lAbandoned Mines&r&e «&r",
-    "pos": "-6, 33, -19",
+    "pos": "-6, 33, -19, world",
     "skin-file": "beach_side_npc.skin",
     "yaw": 180,
     "pitch": 2,
@@ -49,7 +49,7 @@
     }
   }, {
     "name": "&l&6JackNoordhuis",
-    "pos": "-27.5, 33, -9.5",
+    "pos": "-27.5, 33, -9.5, world",
     "skin-file": "jacknoordhuis.skin",
     "yaw": 320,
     "pitch": 2,
@@ -59,7 +59,7 @@
     }
   }, {
     "name": "&l&6JackNoordhuis",
-    "pos": "28.5, 33, -9.5",
+    "pos": "28.5, 33, -9.5, world",
     "skin-file": "jacknoordhuis.skin",
     "yaw": 40,
     "pitch": 2,
@@ -69,7 +69,7 @@
     }
   }, {
     "name": "&l&eMegaOS",
-    "pos": "-27.5, 33, -14.5",
+    "pos": "-27.5, 33, -14.5, world",
     "skin-file": "megaos.skin",
     "yaw": 320,
     "pitch": 2,
@@ -79,7 +79,7 @@
     }
   }, {
     "name": "&l&eThatAussie",
-    "pos": "-27.5, 33, -19.5",
+    "pos": "-27.5, 33, -19.5, world",
     "skin-file": "thataussie.skin",
     "yaw": 320,
     "pitch": 2,
@@ -89,7 +89,7 @@
     }
   }, {
     "name": "&l&eJakeisthebest11",
-    "pos": "28.5, 33, -14.5",
+    "pos": "28.5, 33, -14.5, world",
     "skin-file": "jakeisthebest11.skin",
     "yaw": 40,
     "pitch": 2,
@@ -99,7 +99,7 @@
     }
   }, {
     "name": "&l&eSamtheBeast7",
-    "pos": "28.5, 33, -19.5",
+    "pos": "28.5, 33, -19.5, world",
     "skin-file": "samthebeast7.skin",
     "yaw": 40,
     "pitch": 2,

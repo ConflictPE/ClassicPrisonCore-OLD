@@ -21,7 +21,6 @@ namespace classicprison\entity\npc;
 use core\entity\npc\HumanNPC;
 use core\Utils;
 use classicprison\Main;
-use classicprison\task\UpdatePlayingCountTask;
 use pocketmine\entity\Entity;
 use pocketmine\level\Location;
 use pocketmine\level\Position;
@@ -36,9 +35,6 @@ class NPCManager {
 
 	/** @var Main */
 	private $plugin;
-
-	/** @var UpdatePlayingCountTask */
-	private $updateTask;
 
 	/** @var HumanNPC[] */
 	public $spawned = [];
@@ -61,7 +57,6 @@ class NPCManager {
 		Entity::registerEntity(DisplayNPC::class, true);
 		Entity::registerEntity(CommandNPC::class, true);
 		$this->spawnFromData();
-		$this->updateTask = new UpdatePlayingCountTask($plugin);
 	}
 
 	/**

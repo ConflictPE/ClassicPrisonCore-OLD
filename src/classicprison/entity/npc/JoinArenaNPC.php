@@ -19,9 +19,7 @@
 namespace classicprison\entity\npc;
 
 use core\entity\npc\HumanNPC;
-use core\entity\text\UpdatableFloatingText;
 use core\Utils;
-use classicprison\arena\Arena;
 use classicprison\ClassicPrisonPlayer;
 use classicprison\Main;
 use pocketmine\event\entity\EntityDamageByEntityEvent;

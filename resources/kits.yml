@@ -1,0 +1,15 @@
+Ninja:
+  #TRUE/FALSE
+  vip: false
+  #SECONDS
+  cooldown: 180
+  items:
+    # ITEM NAME/ID : AMOUNT : META
+    - "0:0:0"
+    - "air:0:0"
+    - "stone:2:0"
+  armor:
+    helmet: "diamond_helmet"
+    chestplate: "air"
+    leggings: "air"
+    boots: "air"

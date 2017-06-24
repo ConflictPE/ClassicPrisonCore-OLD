@@ -20,7 +20,6 @@ namespace classicprison;
 
 use core\CorePlayer;
 use core\language\LanguageManager;
-use classicprison\arena\Arena;
 use core\Utils;
 use pocketmine\entity\Projectile;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -114,4 +113,10 @@ class ClassicPrisonPlayer extends CorePlayer {
 			throw new PluginException("ClassicPrison plugin isn't loaded!");
 		}
 	}
+
+	public function isVip() : bool
+    {
+        //TODO: Implement permissions/fetch from API(when they join ofcourse)
+        return true;
+    }
 }

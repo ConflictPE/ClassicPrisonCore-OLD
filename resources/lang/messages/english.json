@@ -1,4 +1,10 @@
 {
+  "KIT_INV_FULL": "&cOops! Your inventory is either too full or you have armor equipped.",
+  "KIT_AVAILABLE": "&6-= Available Kits =-\n{args1}\n&6-============-",
+  "KIT_NULL": "&cThe kit '{args1}' does not exist!",
+  "KIT_USE": "&6You have equipped the {args1} kit!",
+  "KIT_USE_PERMISSION": "&cYou dont have permission to use the {args1} kit!",
+  "KIT_USE_COOLDOWN": "&cYou must wait {args1} minutes to use this kit again!",
   "ALREADY_IN_ARENA": "&cYou're already in an arena!&6 Type /hub to leave your current arena.",
   "ARENA_JOIN_ERROR": "&cAn error occurred while attempting to join the arena.",
   "ARENA_JOIN": "&6You've joined arena &a{args1}&6 made by &e{args2}",

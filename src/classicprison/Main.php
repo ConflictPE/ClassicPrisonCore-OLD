@@ -18,16 +18,14 @@
 
 namespace classicprison;
 
-use classicprison\command\RestoreKitCommand;
+use classicprison\command\Kit;
 use classicprison\command\SilentMessageCommand;
-use core\entity\text\FloatingTextManager;
-use core\entity\text\UpdatableFloatingText;
+use classicprison\kits\ClassicPrisonKitManager;
+use classicprison\mines\MineReset;
 use core\language\LanguageManager;
 use core\Utils;
-use classicprison\arena\ArenaManager;
 use classicprison\command\HubCommand;
 use classicprison\entity\npc\NPCManager;
-use classicprison\task\UpdateInfoTextTask;
 use pocketmine\item\Item;
 use pocketmine\item\Potion;
 use pocketmine\level\Position;
@@ -49,6 +47,12 @@ class Main extends PluginBase {
 
 	/** @var NPCManager */
 	private $npcManager;
+
+	/** @var  ClassicPrisonKitManager */
+	private $kitManager;
+
+	/** @var  MineReset */
+	private $mineReset;
 
 	/** @var Main */
 	public static $instance = null;
@@ -73,11 +77,18 @@ class Main extends PluginBase {
 		$this->loadConfigs();
 		$this->setListener();
 		$this->setNpcManager();
+		$this->setKitManager();
+		$this->setMineReset();
 		$this->registerCommands();
 		$this->getServer()->getNetwork()->setName($components->getLanguageManager()->translate("SERVER_NAME", "en"));
 	}
 
-	public function loadConfigs() {
+	public function onDisable()
+    {
+        $this->getKitManager()->onDisable();
+    }
+
+    public function loadConfigs() {
 		$this->saveResource("Settings.yml");
 		$this->settings = new Config($this->getDataFolder() . "Settings.yml",  Config::YAML);
 		$path = $this->getDataFolder() . self::MESSAGES_FILE_PATH;
@@ -96,7 +107,7 @@ class Main extends PluginBase {
 	protected function registerCommands() {
 		$this->components->getCommandMap()->registerAll([
 			new HubCommand($this),
-			new SilentMessageCommand($this),
+			new SilentMessageCommand($this)
 		]);
 	}
 
@@ -135,6 +146,29 @@ class Main extends PluginBase {
 		return $this->npcManager;
 	}
 
+    /**
+     * @return ClassicPrisonKitManager
+     */
+    public function getKitManager() {
+        return $this->kitManager;
+    }
+
+    /**
+     * @return MineReset
+     */
+    public function getMineReset(): MineReset
+    {
+        return $this->mineReset;
+    }
+
+    /**
+     * @param MineReset $mineReset
+     */
+    public function setMineReset()
+    {
+        $this->mineReset = new MineReset($this);
+    }
+
 	/**
 	 * Set the listener
 	 */
@@ -148,6 +182,13 @@ class Main extends PluginBase {
 	public function setNpcManager() {
 		$this->npcManager = new NPCManager($this);
 	}
+
+    /**
+     * Set the kit manager
+     */
+    public function setKitManager() {
+        $this->kitManager = new ClassicPrisonKitManager($this);
+    }
 
 	/**
 	 * Give a player an array of items and order them correctly in their hot bar
@@ -167,5 +208,4 @@ class Main extends PluginBase {
 		}
 		$inv->sendContents($player);
 	}
-
 }

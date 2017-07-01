@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ClassicPrison – CommandNPC.php
  *
@@ -29,11 +28,29 @@ use pocketmine\nbt\tag\CompoundTag;
 
 class CommandNPC extends HumanNPC {
 
+	/** @var ConsoleCommandSender */
+	protected $commandSender;
 	/** @var string[] */
 	private $commands = [];
 
-	/** @var ConsoleCommandSender */
-	protected $commandSender;
+	/**
+	 * @param string $shortName
+	 * @param Location $pos
+	 * @param string $name
+	 * @param string $skin
+	 * @param string $skinName
+	 * @param CompoundTag $nbt
+	 * @param string[] $commands
+	 *
+	 * @return CommandNPC|HumanNPC
+	 */
+	public static function spawn($shortName, Location $pos, $name, $skin, $skinName, CompoundTag $nbt, array $commands = []) {
+		$entity = parent::spawn($shortName, $pos, $name, $skin, $skinName, $nbt);
+		if($entity instanceof CommandNPC)
+			$entity->commands = $commands;
+		$entity->commandSender = new ConsoleCommandSender();
+		return $entity;
+	}
 
 	/**
 	 * Add a command to execute when a player taps the npc
@@ -71,10 +88,10 @@ class CommandNPC extends HumanNPC {
 					foreach($this->commands as $command) {
 						$this->getCore()->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace([
 							"{name}",
-							"{player}"
+							"{player}",
 						], [
 							$attacker->getName(),
-							$attacker->getName()
+							$attacker->getName(),
 						], $command));
 					}
 				} else {
@@ -82,24 +99,6 @@ class CommandNPC extends HumanNPC {
 				}
 			}
 		}
-	}
-
-	/**
-	 * @param string $shortName
-	 * @param Location $pos
-	 * @param string $name
-	 * @param string $skin
-	 * @param string $skinName
-	 * @param CompoundTag $nbt
-	 * @param string[] $commands
-	 *
-	 * @return CommandNPC|HumanNPC
-	 */
-	public static function spawn($shortName, Location $pos, $name, $skin, $skinName, CompoundTag $nbt, array $commands = []) {
-		$entity = parent::spawn($shortName, $pos, $name, $skin, $skinName, $nbt);
-		if($entity instanceof CommandNPC) $entity->commands = $commands;
-		$entity->commandSender = new ConsoleCommandSender();
-		return $entity;
 	}
 
 }

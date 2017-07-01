@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ClassicPrison – ClassicPrisonListener.php
+ * ClassicPrisonCore – ClassicPrisonListener.php
  *
  * Copyright (C) 2017 Jack Noordhuis
  *
@@ -18,13 +18,18 @@
 
 namespace classicprison;
 
+use classicprison\mines\Mine;
 use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerKickEvent;
+use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\level\Location;
+use pocketmine\utils\TextFormat;
 
 class ClassicPrisonListener implements Listener {
 
@@ -43,7 +48,8 @@ class ClassicPrisonListener implements Listener {
 		return $this->plugin;
 	}
 
-	public function onJoin(PlayerJoinEvent $event) {}
+	public function onJoin(PlayerJoinEvent $event) {
+	}
 
 	/**
 	 * @param PlayerCreationEvent $event
@@ -72,11 +78,41 @@ class ClassicPrisonListener implements Listener {
 		$player->kill();
 	}
 
-	public function onBlockBreak(BlockBreakEvent $event) {
-	    $drops = $event->getDrops();
-	    $player = $event->getPlayer();
-	    $player->getInventory()->addItem($drops);
-	    $event->setDrops([]);
-    }
+	/**
+	 * @priority HIGH
+	 *
+	 * @param PlayerMoveEvent $event
+	 */
+	public function onMove(PlayerMoveEvent $event) {
+		/** @var $mine Mine */
+		if(($mine = $this->plugin->getMineManager()->isMineResettingAtPosition($event->getTo())) instanceof Mine) {
+			$event->getPlayer()->sendMessage(TextFormat::RED . "A mine is currently resetting in this area. You may not move here." . TextFormat::RESET);
+			$event->setTo(new Location($mine->getMineSpawn()->x, $mine->getMineSpawn()->y, $mine->getMineSpawn()->z, $event->getTo()->yaw, $event->getTo()->pitch, $mine->getMineSpawn()->getLevel()));
+		}
+	}
+
+	/**
+	 * @priority HIGH
+	 *
+	 * @param BlockPlaceEvent $event
+	 */
+	public function onBlockPlace(BlockPlaceEvent $event) {
+		if($this->plugin->getMineManager()->isMineResettingAtPosition($event->getBlock()) instanceof Mine) {
+			$event->getPlayer()->sendMessage(TextFormat::RED . "A mine is currently resetting in this area. You may not place blocks." . TextFormat::RESET);
+			$event->setCancelled();
+		}
+	}
+
+	/**
+	 * @priority HIGH
+	 *
+	 * @param BlockBreakEvent $event
+	 */
+	public function onBlockDestroy(BlockBreakEvent $event) {
+		if($this->plugin->getMineManager()->isMineResettingAtPosition($event->getBlock()) instanceof Mine) {
+			$event->getPlayer()->sendMessage(TextFormat::RED . "A mine is currently resetting in this area. You may not break blocks." . TextFormat::RESET);
+			$event->setCancelled();
+		}
+	}
 
 }

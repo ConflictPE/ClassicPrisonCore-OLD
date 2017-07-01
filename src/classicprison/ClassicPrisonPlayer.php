@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ClassicPrison – ClassicPrisonPlayer.php
+ * ClassicPrisonCore – ClassicPrisonPlayer.php
  *
  * Copyright (C) 2017 Jack Noordhuis
  *
@@ -58,7 +58,7 @@ class ClassicPrisonPlayer extends CorePlayer {
 	public function updateKillStreak() {
 		$this->killStreak++;
 		$this->sendTranslatedMessage("KILL_STREAK_UPDATE", [$this->getKillStreak()], true);
-		$killMessage = $this->getCore()->getLanguageManager()->translateForPlayer($this, "KILL_MESSAGE_" . (string)mt_rand(1, 5));
+		$killMessage = $this->getCore()->getLanguageManager()->translateForPlayer($this, "KILL_MESSAGE_" . (string) mt_rand(1, 5));
 		if($this->killStreak < 3) {
 			$health = 4 + (1 * $this->getKillStreak());
 			$this->sendTranslatedMessage("HEALTH_GAIN", [$killMessage, $health / 2], true);
@@ -114,9 +114,8 @@ class ClassicPrisonPlayer extends CorePlayer {
 		}
 	}
 
-	public function isVip() : bool
-    {
-        //TODO: Implement permissions/fetch from API(when they join ofcourse)
-        return true;
-    }
+	public function isVip() : bool {
+		//TODO: Implement permissions/fetch from API(when they join ofcourse)
+		return true;
+	}
 }

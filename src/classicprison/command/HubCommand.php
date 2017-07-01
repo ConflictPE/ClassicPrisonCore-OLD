@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ClassicPrison – HubCommand.php
+ * ClassicPrisonCore – HubCommand.php
  *
  * Copyright (C) 2017 Jack Noordhuis
  *
@@ -18,10 +18,10 @@
 
 namespace classicprison\command;
 
+use classicprison\ClassicPrisonPlayer;
 use classicprison\Main;
 use core\command\CoreUserCommand;
 use core\CorePlayer;
-use classicprison\ClassicPrisonPlayer;
 
 class HubCommand extends CoreUserCommand {
 

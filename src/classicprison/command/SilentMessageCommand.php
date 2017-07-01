@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ClassicPrison – SilentMessageCommand.php
+ * ClassicPrisonCore – SilentMessageCommand.php
  *
  * Copyright (C) 2017 Jack Noordhuis
  *

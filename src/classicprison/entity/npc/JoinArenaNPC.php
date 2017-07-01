@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ClassicPrison – JoinArenaNPC.php
  *
@@ -18,10 +17,10 @@
 
 namespace classicprison\entity\npc;
 
-use core\entity\npc\HumanNPC;
-use core\Utils;
 use classicprison\ClassicPrisonPlayer;
 use classicprison\Main;
+use core\entity\npc\HumanNPC;
+use core\Utils;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\level\Location;
@@ -30,19 +29,37 @@ use pocketmine\plugin\PluginException;
 
 class JoinArenaNPC extends HumanNPC {
 
+	/** @var UpdatableFloatingText */
+	public $playingText;
 	/** @var Main */
 	private $plugin;
-
 	/** @var Arena */
 	private $arena;
 
-	/** @var UpdatableFloatingText */
-	public $playingText;
+	/**
+	 * @param string $shortName
+	 * @param Location $pos
+	 * @param string $name
+	 * @param string $skin
+	 * @param string $skinName
+	 * @param CompoundTag $nbt
+	 * @param string $arena
+	 *
+	 * @return JoinArenaNPC|HumanNPC|null
+	 */
+	public static function spawn($shortName, Location $pos, $name, $skin, $skinName, CompoundTag $nbt, $arena = "") {
+		$entity = parent::spawn($shortName, $pos, $name, $skin, $skinName, $nbt);
+		if($entity instanceof JoinArenaNPC) {
+			$entity->updatePlayingText("&l&e0 players playing&r");
+			$entity->setArena($arena);
+		}
+		return $entity;
+	}
 
 	public function initEntity() {
 		parent::initEntity();
 		$plugin = $this->server->getPluginManager()->getPlugin("ClassicPrison");
-		if($plugin instanceof Main and $plugin->isEnabled()){
+		if($plugin instanceof Main and $plugin->isEnabled()) {
 			$this->plugin = $plugin;
 		} else {
 			throw new PluginException("ClassicPrison plugin isn't loaded!");
@@ -103,26 +120,6 @@ class JoinArenaNPC extends HumanNPC {
 				}
 			}
 		}
-	}
-
-	/**
-	 * @param string $shortName
-	 * @param Location $pos
-	 * @param string $name
-	 * @param string $skin
-	 * @param string $skinName
-	 * @param CompoundTag $nbt
-	 * @param string $arena
-	 *
-	 * @return JoinArenaNPC|HumanNPC|null
-	 */
-	public static function spawn($shortName, Location $pos, $name, $skin, $skinName, CompoundTag $nbt, $arena = "") {
-		$entity = parent::spawn($shortName, $pos, $name, $skin, $skinName, $nbt);
-		if($entity instanceof JoinArenaNPC) {
-			$entity->updatePlayingText("&l&e0 players playing&r");
-			$entity->setArena($arena);
-		}
-		return $entity;
 	}
 
 }

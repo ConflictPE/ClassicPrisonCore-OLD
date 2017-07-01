@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ClassicPrison – HubCommand.php
+ * ClassicPrisonCore – HubCommand.php
  *
  * Copyright (C) 2017 Jack Noordhuis
  *
@@ -18,41 +18,41 @@
 
 namespace classicprison\command;
 
+use classicprison\ClassicPrisonPlayer;
 use classicprison\kits\ClassicPrisonKit;
 use classicprison\kits\ClassicPrisonKitManager;
 use classicprison\Main;
 use core\command\CoreUserCommand;
 use core\CorePlayer;
-use classicprison\ClassicPrisonPlayer;
 
 class Kit extends CoreUserCommand {
 
-    /** @var ClassicPrisonKitManager  */
-    private $manager;
+	/** @var ClassicPrisonKitManager */
+	private $manager;
 
 	public function __construct(Main $plugin, ClassicPrisonKitManager $manager) {
-	    $this->manager = $manager;
+		$this->manager = $manager;
 		parent::__construct($plugin->getCore(), "kit", "The main command for choosing a kit", "/kit <kitName>", []);
 	}
 
 	public function onRun(CorePlayer $player, array $args) {
 		/** @var ClassicPrisonPlayer $player */
 		switch(count($args)) {
-            case 0:
-                $this->manager->sendAvailableKits($player);
-                break;
-            case 1:
-                if($this->manager->kitExists($args[0])) {
-                    /** @var ClassicPrisonKit $kit */
-                    $kit = $this->manager->getKit($args[0]);
-                    if ($kit != null) {
-                        $kit->requestKit($player);
-                    } else {
-                        $player->sendTranslatedMessage("KIT_NULL", [$args[0]], true);
-                    }
-                }
-                break;
-        }
+			case 0:
+				$this->manager->sendAvailableKits($player);
+				break;
+			case 1:
+				if($this->manager->kitExists($args[0])) {
+					/** @var ClassicPrisonKit $kit */
+					$kit = $this->manager->getKit($args[0]);
+					if($kit != null) {
+						$kit->requestKit($player);
+					} else {
+						$player->sendTranslatedMessage("KIT_NULL", [$args[0]], true);
+					}
+				}
+				break;
+		}
 	}
 
 }

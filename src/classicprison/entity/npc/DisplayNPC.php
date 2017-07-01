@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ClassicPrison – DisplayNPC.php
  *
@@ -32,6 +31,24 @@ class DisplayNPC extends HumanNPC {
 	private $text = "";
 
 	/**
+	 * @param string $shortName
+	 * @param Location $pos
+	 * @param string $name
+	 * @param string $skin
+	 * @param string $skinName
+	 * @param CompoundTag $nbt
+	 * @param string $text
+	 *
+	 * @return HumanNPC|null
+	 */
+	public static function spawn($shortName, Location $pos, $name, $skin, $skinName, CompoundTag $nbt, $text = "") {
+		$entity = parent::spawn($shortName, $pos, $name, $skin, $skinName, $nbt);
+		if($entity instanceof DisplayNPC)
+			$entity->setText($text);
+		return $entity;
+	}
+
+	/**
 	 * Set the text to display to players when they tap the npc
 	 *
 	 * @param string $text
@@ -61,23 +78,6 @@ class DisplayNPC extends HumanNPC {
 				}
 			}
 		}
-	}
-
-	/**
-	 * @param string $shortName
-	 * @param Location $pos
-	 * @param string $name
-	 * @param string $skin
-	 * @param string $skinName
-	 * @param CompoundTag $nbt
-	 * @param string $text
-	 *
-	 * @return HumanNPC|null
-	 */
-	public static function spawn($shortName, Location $pos, $name, $skin, $skinName, CompoundTag $nbt, $text = "") {
-		$entity = parent::spawn($shortName, $pos, $name, $skin, $skinName, $nbt);
-		if($entity instanceof DisplayNPC) $entity->setText($text);
-		return $entity;
 	}
 
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ClassicPrison – NPCManager.php
  *
@@ -18,33 +17,32 @@
 
 namespace classicprison\entity\npc;
 
+use classicprison\Main;
 use core\entity\npc\HumanNPC;
 use core\Utils;
-use classicprison\Main;
 use pocketmine\entity\Entity;
 use pocketmine\level\Location;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\utils\Config;
 
 class NPCManager {
 
-	/** @var Main */
-	private $plugin;
-
-	/** @var HumanNPC[] */
-	public $spawned = [];
+	const DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "NPCs.json";
+	const TYPE_COMMAND = "command";
 
 	/* Path to where the NPC data file is stored */
-	const DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "NPCs.json";
+	const TYPE_DISPLAY = "display";
 
 	/* NPC types */
-	const TYPE_COMMAND = "command";
-	const TYPE_DISPLAY = "display";
+	/** @var HumanNPC[] */
+	public $spawned = [];
+	/** @var Main */
+	private $plugin;
 
 	/**
 	 * NPCManager constructor
@@ -66,22 +64,6 @@ class NPCManager {
 		return $this->plugin;
 	}
 
-	private function spawnFromData() {
-		$data = (new Config($this->plugin->getDataFolder() . self::DATA_FILE_PATH))->getAll();
-		foreach($data as $npc) {
-			try {
-				$path = "data" . DIRECTORY_SEPARATOR . "skins" . DIRECTORY_SEPARATOR . $npc["skin-file"];
-				$this->plugin->saveResource($path);
-				$npc["skin"] = file_get_contents($this->plugin->getDataFolder() . $path);
-				$npc["skinName"] = "Standard_Custom";
-			} catch(\ArrayOutOfBoundsException $e) {
-				$npc["skin"] = "";
-				$npc["skinName"] = "Standard_Custom";
-			}
-			$this->spawn(Utils::parsePosition($npc["pos"]), Utils::translateColors($npc["name"]), $npc["skin"], $npc["skinName"], $npc["yaw"], $npc["pitch"], $npc["type"], $npc["data"]);
-		}
-	}
-
 	public function spawn(Position $pos, $name, $skin, $skinName = "custom", $yaw = 180, $pitch = 0, $type = "display", $extraData = []) {
 		$location = new Location($pos->x, $pos->y, $pos->z, $yaw, $pitch, $pos->getLevel());
 		switch($type) {
@@ -97,16 +79,16 @@ class NPCManager {
 			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $pos->x),
 				new DoubleTag("", $pos->y),
-				new DoubleTag("", $pos->z)
+				new DoubleTag("", $pos->z),
 			]),
 			"Motion" => new ListTag("Motion", [
 				new DoubleTag("", 0),
 				new DoubleTag("", 0),
-				new DoubleTag("", 0)
+				new DoubleTag("", 0),
 			]),
 			"Rotation" => new ListTag("Rotation", [
 				new FloatTag("", 180),
-				new FloatTag("", 0)
+				new FloatTag("", 0),
 			]),
 		]);
 	}
@@ -116,6 +98,22 @@ class NPCManager {
 	 */
 	public function getSpawned() {
 		return $this->spawned;
+	}
+
+	private function spawnFromData() {
+		$data = (new Config($this->plugin->getDataFolder() . self::DATA_FILE_PATH))->getAll();
+		foreach($data as $npc) {
+			try {
+				$path = "data" . DIRECTORY_SEPARATOR . "skins" . DIRECTORY_SEPARATOR . $npc["skin-file"];
+				$this->plugin->saveResource($path);
+				$npc["skin"] = file_get_contents($this->plugin->getDataFolder() . $path);
+				$npc["skinName"] = "Standard_Custom";
+			} catch(\ArrayOutOfBoundsException $e) {
+				$npc["skin"] = "";
+				$npc["skinName"] = "Standard_Custom";
+			}
+			$this->spawn(Utils::parsePosition($npc["pos"]), Utils::translateColors($npc["name"]), $npc["skin"], $npc["skinName"], $npc["yaw"], $npc["pitch"], $npc["type"], $npc["data"]);
+		}
 	}
 
 }

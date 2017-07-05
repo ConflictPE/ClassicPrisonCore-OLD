@@ -23,33 +23,34 @@ use classicprison\mines\MineReset;
 use core\command\CoreUserCommand;
 use core\CorePlayer;
 
-class MineCommand extends CoreUserCommand {
+class MineCommand extends CoreUserCommand
+{
 
-	/** @var MineReset */
-	protected $api;
+    /** @var MineReset */
+    protected $api;
 
-	/** @var SubCommand[] */
-	protected $subCommands = [];
+    /** @var SubCommand[] */
+    protected $subCommands = [];
 
-	public function __construct(Main $plugin) {
-		parent::__construct($plugin, "mine", "Main command for managing prison mines", "/mine <create|set|list|reset|reset-all|destroy> <name> [parameters]");
-	}
+    public function __construct(Main $plugin) {
+        parent::__construct($plugin, "mine", "Main command for managing prison mines", "/mine <create|set|list|reset|reset-all|destroy> <name> [parameters]");
+    }
 
-	public function onRun(CorePlayer $sender, array $args) {
-		if(count($args) > 0 and isset($this->subCommands[($subCmd = strtolower(array_shift($args[0])))])) {
-			return $this->subCommands[$subCmd]->execute($sender, $args);
-		} else {
-			$sender->sendMessage($this->getUsage());
-			return false;
-		}
-	}
+    public function onRun(CorePlayer $sender, array $args) {
+        if (count($args) > 0 and isset($this->subCommands[($subCmd = strtolower(array_shift($args[0])))])) {
+            return $this->subCommands[$subCmd]->execute($sender, $args);
+        } else {
+            $sender->sendMessage($this->getUsage());
+            return false;
+        }
+    }
 
-	public function registerSubCommand(string $name, SubCommand $command, $aliases = []) {
-		$this->subCommands[$name] = $command;
-		foreach($aliases as $alias) {
-			if(!isset($this->subCommands[$alias])) {
-				$this->registerSubCommand($alias, $command);
-			}
-		}
-	}
+    public function registerSubCommand(string $name, SubCommand $command, $aliases = []) {
+        $this->subCommands[$name] = $command;
+        foreach ($aliases as $alias) {
+            if (!isset($this->subCommands[$alias])) {
+                $this->registerSubCommand($alias, $command);
+            }
+        }
+    }
 }

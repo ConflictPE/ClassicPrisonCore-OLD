@@ -24,25 +24,26 @@ use core\command\CoreCommand;
 use core\Utils;
 use pocketmine\command\CommandSender;
 
-class SilentMessageCommand extends CoreCommand {
+class SilentMessageCommand extends CoreCommand
+{
 
-	public function __construct(Main $plugin) {
-		parent::__construct($plugin->getCore(), "silentmessage", "Send a silent message to a player", "/silentmessage {player} {message}", ["sm"]);
-	}
+    public function __construct(Main $plugin) {
+        parent::__construct($plugin->getCore(), "silentmessage", "Send a silent message to a player", "/silentmessage {player} {message}", ["sm"]);
+    }
 
-	public function run(CommandSender $sender, array $args) {
-		if(isset($args[1])) {
-			$target = $this->getPlugin()->getServer()->getPlayer($plain = array_shift($args));
-			if($target instanceof ClassicPrisonPlayer and $target->isOnline()) {
-				$target->sendMessage(Utils::translateColors(implode(" ", $args)));
-				if($sender instanceof ClassicPrisonPlayer)
-					$sender->sendTranslatedMessage("SILENT_MESSAGE_COMMAND", [], true);
-			} else {
-				$sender->sendMessage($this->getPlugin()->getLanguageManager()->translate("USER_NOT_ONLINE", "en", [$plain]));
-			}
-		} else {
-			$sender->sendMessage($this->getPlugin()->getLanguageManager()->translate("COMMAND_USAGE", "en", [$this->getUsage()]));
-		}
-	}
+    public function run(CommandSender $sender, array $args) {
+        if (isset($args[1])) {
+            $target = $this->getPlugin()->getServer()->getPlayer($plain = array_shift($args));
+            if ($target instanceof ClassicPrisonPlayer and $target->isOnline()) {
+                $target->sendMessage(Utils::translateColors(implode(" ", $args)));
+                if ($sender instanceof ClassicPrisonPlayer)
+                    $sender->sendTranslatedMessage("SILENT_MESSAGE_COMMAND", [], true);
+            } else {
+                $sender->sendMessage($this->getPlugin()->getLanguageManager()->translate("USER_NOT_ONLINE", "en", [$plain]));
+            }
+        } else {
+            $sender->sendMessage($this->getPlugin()->getLanguageManager()->translate("COMMAND_USAGE", "en", [$this->getUsage()]));
+        }
+    }
 
 }

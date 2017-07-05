@@ -26,79 +26,80 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\level\Location;
 use pocketmine\nbt\tag\CompoundTag;
 
-class CommandNPC extends HumanNPC {
+class CommandNPC extends HumanNPC
+{
 
-	/** @var ConsoleCommandSender */
-	protected $commandSender;
-	/** @var string[] */
-	private $commands = [];
+    /** @var ConsoleCommandSender */
+    protected $commandSender;
+    /** @var string[] */
+    private $commands = [];
 
-	/**
-	 * @param string $shortName
-	 * @param Location $pos
-	 * @param string $name
-	 * @param string $skin
-	 * @param string $skinName
-	 * @param CompoundTag $nbt
-	 * @param string[] $commands
-	 *
-	 * @return CommandNPC|HumanNPC
-	 */
-	public static function spawn($shortName, Location $pos, $name, $skin, $skinName, CompoundTag $nbt, array $commands = []) {
-		$entity = parent::spawn($shortName, $pos, $name, $skin, $skinName, $nbt);
-		if($entity instanceof CommandNPC)
-			$entity->commands = $commands;
-		$entity->commandSender = new ConsoleCommandSender();
-		return $entity;
-	}
+    /**
+     * @param string $shortName
+     * @param Location $pos
+     * @param string $name
+     * @param string $skin
+     * @param string $skinName
+     * @param CompoundTag $nbt
+     * @param string[] $commands
+     *
+     * @return CommandNPC|HumanNPC
+     */
+    public static function spawn($shortName, Location $pos, $name, $skin, $skinName, CompoundTag $nbt, array $commands = []) {
+        $entity = parent::spawn($shortName, $pos, $name, $skin, $skinName, $nbt);
+        if ($entity instanceof CommandNPC)
+            $entity->commands = $commands;
+        $entity->commandSender = new ConsoleCommandSender();
+        return $entity;
+    }
 
-	/**
-	 * Add a command to execute when a player taps the npc
-	 *
-	 * @param string $command
-	 */
-	public function addCommand($command = "") {
-		$this->commands[] = $command;
-	}
+    /**
+     * Add a command to execute when a player taps the npc
+     *
+     * @param string $command
+     */
+    public function addCommand($command = "") {
+        $this->commands[] = $command;
+    }
 
-	/**
-	 * Set the commands to execute when a player taps the bpc
-	 *
-	 * @param array $commands
-	 */
-	public function setCommands(array $commands) {
-		$this->commands = $commands;
-	}
+    /**
+     * Set the commands to execute when a player taps the bpc
+     *
+     * @param array $commands
+     */
+    public function setCommands(array $commands) {
+        $this->commands = $commands;
+    }
 
-	/**
-	 * Get the commands to execute when a player taps an npc
-	 *
-	 * @return string
-	 */
-	public function getCommands() {
-		return $this->commands;
-	}
+    /**
+     * Get the commands to execute when a player taps an npc
+     *
+     * @return string
+     */
+    public function getCommands() {
+        return $this->commands;
+    }
 
-	public function attack($damage, EntityDamageEvent $source) {
-		parent::attack($damage, $source);
-		if($source instanceof EntityDamageByEntityEvent) {
-			$attacker = $source->getDamager();
-			if($attacker instanceof ClassicPrisonPlayer) {
-				if($attacker->isAuthenticated()) {
-					foreach($this->commands as $command) {
-						$this->getCore()->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace([
-							"{name}",
-							"{player}",
-						], [
-							$attacker->getName(),
-							$attacker->getName(),
-						], $command));
-					}
-				} else {
-					$attacker->sendTranslatedMessage("MUST_AUTHENTICATE_FIRST", [], true);
-				}
-			}
-		}
-	}
+    public function attack($damage, EntityDamageEvent $source) {
+        parent::attack($damage, $source);
+        if ($source instanceof EntityDamageByEntityEvent) {
+            $attacker = $source->getDamager();
+            if ($attacker instanceof ClassicPrisonPlayer) {
+                if ($attacker->isAuthenticated()) {
+                    foreach ($this->commands as $command) {
+                        $this->getCore()->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace([
+                            "{name}",
+                            "{player}",
+                        ], [
+                            $attacker->getName(),
+                            $attacker->getName(),
+                        ], $command));
+                    }
+                } else {
+                    $attacker->sendTranslatedMessage("MUST_AUTHENTICATE_FIRST", [], true);
+                }
+            }
+        }
+    }
 
 }

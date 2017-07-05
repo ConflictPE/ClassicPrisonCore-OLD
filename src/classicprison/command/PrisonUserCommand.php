@@ -21,35 +21,36 @@ namespace classicprison\command;
 use core\command\CoreUserCommand;
 use core\Main;
 
-abstract class PrisonUserCommand extends CoreUserCommand {
+abstract class PrisonUserCommand extends CoreUserCommand
+{
 
-	/** @var PrisonSubCommand[] */
-	private $subCommands = [];
+    /** @var PrisonSubCommand[] */
+    private $subCommands = [];
 
-	public function __construct(Main $plugin, $name, $description, $usage, $aliases = []) {
-		$this->registerDefaultSubCommands();
-		parent::__construct($plugin, $name, $description, $usage, $aliases);
-	}
+    public function __construct(Main $plugin, $name, $description, $usage, $aliases = []) {
+        $this->registerDefaultSubCommands();
+        parent::__construct($plugin, $name, $description, $usage, $aliases);
+    }
 
-	/**
-	 * Register all the default sub-commands for this command
-	 */
-	protected abstract function registerDefaultSubCommands();
+    /**
+     * Register all the default sub-commands for this command
+     */
+    protected abstract function registerDefaultSubCommands();
 
-	/**
-	 * Register a sub-command
-	 *
-	 * @param PrisonSubCommand $subCommand
-	 */
-	public function registerSubCommand(PrisonSubCommand $subCommand) {
-		foreach(array_merge($subCommand->getAliases(), $subCommand->getName()) as $label) {
-			$name = strtolower($label);
-			if(!isset($this->subCommands[$name])) {
-				$this->subCommands[$name] = $subCommand;
-			} else {
-				// TODO: Error handling (needs to be integrated into core)
-			}
-		}
-	}
+    /**
+     * Register a sub-command
+     *
+     * @param PrisonSubCommand $subCommand
+     */
+    public function registerSubCommand(PrisonSubCommand $subCommand) {
+        foreach (array_merge($subCommand->getAliases(), $subCommand->getName()) as $label) {
+            $name = strtolower($label);
+            if (!isset($this->subCommands[$name])) {
+                $this->subCommands[$name] = $subCommand;
+            } else {
+                // TODO: Error handling (needs to be integrated into core)
+            }
+        }
+    }
 
 }

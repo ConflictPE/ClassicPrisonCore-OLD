@@ -20,29 +20,30 @@ namespace classicprison\command;
 
 use classicprison\ClassicPrisonPlayer;
 
-abstract class PrisonSubCommand {
+abstract class PrisonSubCommand
+{
 
-	/** @var PrisonUserCommand */
-	private $owner = null;
+    /** @var PrisonUserCommand */
+    private $owner = null;
 
-	public function __construct(PrisonUserCommand $owner) {
-		$this->owner = $owner;
-	}
+    public function __construct(PrisonUserCommand $owner) {
+        $this->owner = $owner;
+    }
 
-	public function getOwner() : PrisonUserCommand {
-		return $this->owner;
-	}
+    public function getOwner(): PrisonUserCommand {
+        return $this->owner;
+    }
 
-	public abstract function getName() : string;
+    public abstract function getName(): string;
 
-	public abstract function getUsage() : string;
+    public abstract function getUsage(): string;
 
-	public function getAliases() : array {
-		return [];
-	}
+    public function getAliases(): array {
+        return [];
+    }
 
-	public abstract function run(ClassicPrisonPlayer $sender, array $args);
+    public abstract function run(ClassicPrisonPlayer $sender, array $args);
 
-	public abstract function getPermission() : string;
+    public abstract function getPermission(): string;
 
 }

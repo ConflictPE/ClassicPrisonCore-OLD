@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ClassicPrisonCore – HubCommand.php
  *
@@ -23,18 +22,17 @@ use classicprison\Main;
 use core\command\CoreUserCommand;
 use core\CorePlayer;
 
-class HubCommand extends CoreUserCommand
-{
+class HubCommand extends CoreUserCommand {
 
-    public function __construct(Main $plugin) {
-        parent::__construct($plugin->getCore(), "hub", "Returns you to the hub", "/hub", ["spawn", "lobby"]);
-    }
+	public function __construct(Main $plugin) {
+		parent::__construct($plugin->getCore(), "hub", "Returns you to the hub", "/hub", ["spawn", "lobby"]);
+	}
 
-    public function onRun(CorePlayer $player, array $args) {
-        /** @var ClassicPrisonPlayer $player */
-        $player->teleport($this->getPlugin()->getServer()->getDefaultLevel()->getSafeSpawn());
-        $player->sendTranslatedMessage("HUB_COMMAND", [], true);
-        return true;
-    }
+	public function onRun(CorePlayer $player, array $args) {
+		/** @var ClassicPrisonPlayer $player */
+		$player->teleport($this->getPlugin()->getServer()->getDefaultLevel()->getSafeSpawn());
+		$player->sendTranslatedMessage("HUB_COMMAND", [], true);
+		return true;
+	}
 
 }

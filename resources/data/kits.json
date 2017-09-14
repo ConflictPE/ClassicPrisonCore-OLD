@@ -1,0 +1,72 @@
+{
+  "default": {
+    "display": "&l&6Default",
+    "items": [
+      {
+        "id": 272,
+        "meta": 0,
+        "count": 1,
+        "enchantments": [
+          {
+            "name": "sharpness",
+            "level": 3
+          },
+          {
+            "name": "knockback",
+            "level": 1
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "count": 64
+      },
+      {
+        "id": 1,
+        "meta": 4,
+        "count": 16
+      }
+    ],
+    "helmet": {
+      "id": 302,
+      "enchantments": [
+        {
+          "name": "protection",
+          "level": 1
+        }
+      ]
+    },
+    "chestplate": {
+      "id": 303,
+      "name": "&bCustom Chestplate",
+      "enchantments": [
+        {
+          "name": "protection",
+          "level": 1
+        }
+      ]
+    },
+    "leggings": {
+      "id": 304,
+      "name": "&bCustom Leggings"
+    },
+    "boots": {
+      "id": 305
+    },
+    "effects": [
+      {
+        "name": "speed",
+        "time": 1200,
+        "amplifier": 1
+      },
+      {
+        "name": "damage_resistance",
+        "time": 600
+      }
+    ],
+    "cooldown": {
+      "seconds": 30,
+      "minutes": 1
+    }
+  }
+}

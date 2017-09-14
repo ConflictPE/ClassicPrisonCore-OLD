@@ -19,15 +19,14 @@
 namespace classicprison;
 
 use classicprison\command\HubCommand;
-use classicprison\command\SilentMessageCommand;
+use classicprison\command\KitCommand;
 use classicprison\entity\npc\NPCManager;
-use classicprison\kits\ClassicPrisonKitManager;
-use classicprison\mines\MineManager;
+use classicprison\kit\KitManager;
 use pocketmine\item\Item;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
-use pocketmine\plugin\PluginException;
 use pocketmine\utils\Config;
+use pocketmine\utils\PluginException;
 
 class Main extends PluginBase {
 
@@ -54,11 +53,8 @@ class Main extends PluginBase {
 	/** @var NPCManager */
 	private $npcManager;
 
-	/** @var  ClassicPrisonKitManager */
+	/** @var KitManager */
 	private $kitManager;
-
-	/** @var MineManager */
-	private $mineManager;
 
 	/** Resource files & paths */
 	const MESSAGES_FILE_PATH = "lang" . DIRECTORY_SEPARATOR . "messages" . DIRECTORY_SEPARATOR;
@@ -102,34 +98,32 @@ class Main extends PluginBase {
 		if(!$components instanceof \core\Main)
 			throw new PluginException("Components plugin isn't loaded!");
 		$this->components = $components;
-		if(!is_dir($this->getDataFolder() . "data"))
-			@mkdir($this->getDataFolder() . "data");
-		if(!is_dir($this->getDataFolder() . "data" . DIRECTORY_SEPARATOR . "skins"))
-			@mkdir($this->getDataFolder() . "data" . DIRECTORY_SEPARATOR . "skins");
 		$this->loadConfigs();
-		$this->setListener();
 		$this->setNpcManager();
 		$this->setKitManager();
-		$this->setMineManager();
-		$this->registerCommands();
+		$this->setListener(); // register event listener last due to possible dependency on other components
+		$this->registerCommands(); // register commands last due to possible dependency on other components
 		$this->getServer()->getNetwork()->setName($components->getLanguageManager()->translate("SERVER_NAME", "en"));
 	}
 
 	public function onDisable() {
-		$this->getKitManager()->onDisable();
+		$this->kitManager->saveKitCooldowns(false);
 	}
 
 	public function loadConfigs() {
+		if(!is_dir($this->getDataFolder())) @mkdir($this->getDataFolder());
+		if(!is_dir($this->getDataFolder() . "data")) @mkdir($this->getDataFolder() . "data");
+		if(!is_dir($this->getDataFolder() . "lang")) @mkdir($this->getDataFolder() . "lang");
+		if(!is_dir($this->getDataFolder() . "data" . DIRECTORY_SEPARATOR . "skins")) @mkdir($this->getDataFolder() . "data" . DIRECTORY_SEPARATOR . "skins");
+		$msgPath = $this->getDataFolder() . self::MESSAGES_FILE_PATH;
+		if(!is_dir($msgPath)) @mkdir($msgPath);
 		$this->saveResource("Settings.yml");
-		$this->settings = new Config($this->getDataFolder() . "Settings.yml", Config::YAML);
-		$path = $this->getDataFolder() . self::MESSAGES_FILE_PATH;
-		if(!is_dir($path))
-			@mkdir($path);
+		$this->settings = new Config($this->getDataFolder() . "Settings.yml",  Config::YAML);
 		foreach(self::$languages as $lang => $filename) {
-			$file = $path . $filename;
+			$file = $msgPath . $filename;
 			$this->saveResource(self::MESSAGES_FILE_PATH . $filename);
 			if(!is_file($file)) {
-				$this->getLogger()->notice("Couldn't find language file for '{$lang}'!\nPath: {$file}");
+				echo "Couldn't find language file for '{$lang}'!\nPath: {$file}\n";
 			} else {
 				$this->components->getLanguageManager()->registerLanguage($lang, (new Config($file, Config::JSON))->getAll());
 			}
@@ -142,6 +136,7 @@ class Main extends PluginBase {
 	protected function registerCommands() {
 		$this->components->getCommandMap()->registerAll([
 			new HubCommand($this),
+			new KitCommand($this),
 		]);
 	}
 
@@ -174,17 +169,10 @@ class Main extends PluginBase {
 	}
 
 	/**
-	 * @return ClassicPrisonKitManager
+	 * @return KitManager
 	 */
 	public function getKitManager() {
 		return $this->kitManager;
-	}
-
-	/**
-	 * @return MineManager
-	 */
-	public function getMineManager() : MineManager {
-		return $this->mineManager;
 	}
 
 	/**
@@ -202,17 +190,10 @@ class Main extends PluginBase {
 	}
 
 	/**
-	 * Set the kit manager
+	 * set the kit manager
 	 */
 	public function setKitManager() {
-		$this->kitManager = new ClassicPrisonKitManager($this);
-	}
-
-	/**
-	 * Set the mine manager
-	 */
-	public function setMineManager() {
-		$this->mineManager = new MineManager($this);
+		$this->kitManager = new KitManager($this);
 	}
 
 }

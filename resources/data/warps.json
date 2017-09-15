@@ -1,0 +1,18 @@
+{
+  "spawn": {
+    "aliases": [
+      "hub"
+    ],
+    "pos": "0, 64, 0, prison",
+    "public": true
+  },
+  "kits": {
+    "pos": "24, 64, 24, prison",
+    "public": true
+  },
+  "a": {
+    "pos": "24, 64, 24, prison",
+    "public": true,
+    "type": "mine"
+  }
+}

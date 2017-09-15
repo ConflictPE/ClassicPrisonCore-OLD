@@ -20,8 +20,10 @@ namespace classicprison;
 
 use classicprison\command\HubCommand;
 use classicprison\command\KitCommand;
+use classicprison\command\WarpCommand;
 use classicprison\entity\npc\NPCManager;
 use classicprison\kit\KitManager;
+use classicprison\warp\WarpManager;
 use pocketmine\item\Item;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -55,6 +57,9 @@ class Main extends PluginBase {
 
 	/** @var KitManager */
 	private $kitManager;
+
+	/** @var WarpManager */
+	private $warpManager;
 
 	/** Resource files & paths */
 	const MESSAGES_FILE_PATH = "lang" . DIRECTORY_SEPARATOR . "messages" . DIRECTORY_SEPARATOR;
@@ -101,6 +106,7 @@ class Main extends PluginBase {
 		$this->loadConfigs();
 		$this->setNpcManager();
 		$this->setKitManager();
+		$this->setWarpManager();
 		$this->setListener(); // register event listener last due to possible dependency on other components
 		$this->registerCommands(); // register commands last due to possible dependency on other components
 		$this->getServer()->getNetwork()->setName($components->getLanguageManager()->translate("SERVER_NAME", "en"));
@@ -137,6 +143,7 @@ class Main extends PluginBase {
 		$this->components->getCommandMap()->registerAll([
 			new HubCommand($this),
 			new KitCommand($this),
+			new WarpCommand($this),
 		]);
 	}
 
@@ -176,6 +183,13 @@ class Main extends PluginBase {
 	}
 
 	/**
+	 * @return WarpManager
+	 */
+	public function getWarpManager() {
+		return $this->warpManager;
+	}
+
+	/**
 	 * Set the listener
 	 */
 	public function setListener() {
@@ -190,10 +204,17 @@ class Main extends PluginBase {
 	}
 
 	/**
-	 * set the kit manager
+	 * Set the kit manager
 	 */
 	public function setKitManager() {
 		$this->kitManager = new KitManager($this);
+	}
+
+	/**
+	 * Set the warp manager
+	 */
+	public function setWarpManager() {
+		$this->warpManager = new WarpManager($this);
 	}
 
 }

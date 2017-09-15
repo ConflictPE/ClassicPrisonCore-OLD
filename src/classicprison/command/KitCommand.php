@@ -45,6 +45,7 @@ class KitCommand extends CoreUserCommand {
 				return $kit->getDisplay();
 			}, $kitManager->getKits()))));
 		}
+		return true;
 	}
 
 }

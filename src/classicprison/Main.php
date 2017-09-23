@@ -18,6 +18,7 @@
 
 namespace classicprison;
 
+use classicprison\area\AreaManager;
 use classicprison\command\HubCommand;
 use classicprison\command\KitCommand;
 use classicprison\command\WarpCommand;
@@ -57,6 +58,9 @@ class Main extends PluginBase {
 
 	/** @var KitManager */
 	private $kitManager;
+
+	/** @var AreaManager */
+	private $areaManager;
 
 	/** @var WarpManager */
 	private $warpManager;
@@ -107,6 +111,7 @@ class Main extends PluginBase {
 		$this->setNpcManager();
 		$this->setKitManager();
 		$this->setWarpManager();
+		$this->setAreaManager();
 		$this->setListener(); // register event listener last due to possible dependency on other components
 		$this->registerCommands(); // register commands last due to possible dependency on other components
 		$this->getServer()->getNetwork()->setName($components->getLanguageManager()->translate("SERVER_NAME", "en"));
@@ -190,6 +195,13 @@ class Main extends PluginBase {
 	}
 
 	/**
+	 * @return AreaManager
+	 */
+	public function getAreaManager() {
+		return $this->areaManager;
+	}
+
+	/**
 	 * Set the listener
 	 */
 	public function setListener() {
@@ -215,6 +227,13 @@ class Main extends PluginBase {
 	 */
 	public function setWarpManager() {
 		$this->warpManager = new WarpManager($this);
+	}
+
+	/**
+	 * set the area manager
+	 */
+	public function setAreaManager() {
+		$this->areaManager = new AreaManager($this);
 	}
 
 }

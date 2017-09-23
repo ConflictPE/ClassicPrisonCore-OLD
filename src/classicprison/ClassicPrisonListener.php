@@ -20,6 +20,7 @@ namespace classicprison;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCreationEvent;
+use pocketmine\event\player\PlayerJoinEvent;
 
 class ClassicPrisonListener implements Listener {
 
@@ -36,6 +37,11 @@ class ClassicPrisonListener implements Listener {
 	 */
 	public function getPlugin() {
 		return $this->plugin;
+	}
+
+	public function onJoin(PlayerJoinEvent $event) {
+		$player = $event->getPlayer();
+		$player->setLevel();
 	}
 
 	/**

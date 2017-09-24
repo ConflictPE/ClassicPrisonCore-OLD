@@ -50,6 +50,8 @@ class AreaManager {
 		$this->registerArea(SafeArea::class, true); // register the 'SafeArea' type
 		$this->registerArea(PvPArea::class, true); // register the 'PvPArea' type
 
+		$this->registerFromData();
+
 		$this->updateTask = new AreaUpdateTask($this);
 	}
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ClassicPrisonCore – AreaException.php
+ * ClassicPrisonCore – MineException.php
  *
  * Copyright (C) 2017 Jack Noordhuis
  *
@@ -12,12 +12,12 @@
  *
  * @author Jack Noordhuis
  *
- * Created on 23/9/17 at 10:47 PM
+ * Created on 14/10/17 at 9:26 AM
  *
  */
 
-namespace classicprison\area;
+namespace classicprison\mine\exception;
 
-class AreaException extends \Exception {
+class MineException extends \RuntimeException {
 
 }

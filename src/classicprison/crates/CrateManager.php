@@ -22,10 +22,12 @@ use classicprison\Main;
 
 class CrateManager {
 
-	const CRATE_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "crates.json";
-
 	/** @var Main */
 	private $plugin;
+	
+	private $cratesPool = [];
+
+	const CRATES_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "crates.json";
 
 	public function __construct(Main $plugin) {
 		$this->plugin = $plugin;

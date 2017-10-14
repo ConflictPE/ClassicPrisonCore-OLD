@@ -16,8 +16,8 @@
  *
  */
 
-namespace classicprison\warp;
+namespace classicprison\warp\exception;
 
-class WarpException extends \Exception {
+class WarpException extends \RuntimeException {
 
 }

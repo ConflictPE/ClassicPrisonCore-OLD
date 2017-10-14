@@ -19,9 +19,8 @@
 namespace classicprison\warp;
 
 use classicprison\Main;
+use classicprison\warp\exception\WarpException;
 use core\exception\InvalidConfigException;
-use core\Utils;
-use pocketmine\level\Position;
 
 class WarpManager {
 
@@ -51,9 +50,10 @@ class WarpManager {
 		$this->plugin->saveResource(self::WARPS_DATA_FILE_PATH);
 		foreach(json_decode(file_get_contents($this->plugin->getDataFolder() . self::WARPS_DATA_FILE_PATH), true) as $warpName => $warpData) {
 			try {
-				$this->addWarp($warpName, $warpData["display"] ?? $warpName, Utils::parsePosition($warpData["pos"]), $warpData["aliases"] ?? [], $warpData["public"] ?? true, $this->parseWarpType($warpData["type"] ?? ""));
+				$this->addWarp(Warp::fromData(strtolower($warpName), $warpData));
 			} catch(InvalidConfigException $e) { // if there is an error loading a warp from the config data
 				$this->plugin->getLogger()->warning("Could not load warp {$warpName} due to invalid config! Message: {$e->getMessage()}");
+				$this->plugin->getLogger()->logException($e);
 			} catch(WarpException $e) { // if there is a problem registering the warp
 				$this->plugin->getLogger()->debug($e->getMessage());
 			}
@@ -61,25 +61,20 @@ class WarpManager {
 	}
 
 	/**
-	 * @param string $name
-	 * @param string $display
-	 * @param Position $pos
-	 * @param array $aliases
-	 * @param bool $public
-	 * @param int $type
+	 * @param Warp $warp
 	 *
 	 * @throws WarpException
 	 */
-	public function addWarp(string $name, string $display, Position $pos, array $aliases, bool $public, int $type) {
-		$this->warps[$name] = $warp = new Warp($name, $display, $pos, $aliases, $public, $type);
-		foreach($aliases as $alias) {
+	public function addWarp(Warp $warp) {
+		$this->warps[$name = $warp->getName()] = $warp;
+		foreach($warp->getAliases() as $alias) {
 			if($alias === $name) {
 				throw new WarpException("Tried to register an alias with the same name as the warp! Warp: {$name} Alias: {$alias}");
 			} elseif(isset($this->warps[$alias])) {
 				throw new WarpException("Tried to register an alias for a warp that already exists! Warp: {$name} Alias: {$alias}");
-			} else {
-				$this->warps[$alias] = $warp;
 			}
+
+			$this->warps[$alias] = $warp;
 		}
 	}
 
@@ -117,7 +112,7 @@ class WarpManager {
 	 *
 	 * @return int
 	 */
-	protected function parseWarpType(string $value) : int {
+	public static function getWarpType(string $value) : int {
 		switch(strtolower($value)) {
 			case "mine":
 				return Warp::WARP_TYPE_MINE;

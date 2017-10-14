@@ -19,6 +19,7 @@
 namespace classicprison\mine;
 
 use classicprison\Main;
+use core\exception\InvalidConfigException;
 
 class MineManager {
 
@@ -26,6 +27,9 @@ class MineManager {
 
 	/** @var Main */
 	private $plugin;
+
+	/** @var Mine[] */
+	private $minePool = [];
 
 	public function __construct(Main $plugin) {
 		$this->plugin = $plugin;
@@ -36,6 +40,25 @@ class MineManager {
 	 */
 	public function getPlugin() : Main {
 		return $this->plugin;
+	}
+
+	public function registerFromData() {
+		$this->plugin->saveResource(self::MINES_DATA_FILE_PATH);
+		$data = json_decode(file_get_contents($this->plugin->getDataFolder() . self::MINES_DATA_FILE_PATH), true);
+		foreach($data as $mineName => $mineData) {
+			try {
+				$this->addMine(Mine::fromData(strtolower($mineName), $mineData));
+			} catch(InvalidConfigException $e) {
+				$this->plugin->getLogger()->warning("Could not load mine {$mineName} due to invalid config! Message: {$e->getMessage()}");
+				$this->plugin->getLogger()->logException($e);
+			}
+		}
+	}
+
+	public function addMine(Mine $mine) {
+		$this->minePool[$mine->getName()] = $mine;
+		$this->plugin->getAreaManager()->addArea($mine->getArea());
+		$this->plugin->getWarpManager()->addWarp($mine->getWarp());
 	}
 
 }

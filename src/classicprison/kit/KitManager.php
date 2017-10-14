@@ -99,28 +99,20 @@ class KitManager {
 	private function registerFromData() {
 		$this->plugin->saveResource(self::KITS_DATA_FILE_PATH);
 		$data = json_decode(file_get_contents($this->plugin->getDataFolder() . self::KITS_DATA_FILE_PATH), true);
-		foreach($data as $name => $kitData) {
+		foreach($data as $kitName => $kitData) {
 			try {
-				$this->addKit($name, $kitData["display"] ?? $name, array_map([$this, "parseItem"], $kitData["items"]), $this->parseItem($kitData["helmet"]), $this->parseItem($kitData["chestplate"]), $this->parseItem($kitData["leggings"]), $this->parseItem($kitData["boots"]), array_map([$this, "parseEffect"], $kitData["effects"]), $this->parseCooldown($kitData["cooldown"]));
+				$this->addKit(Kit::fromData($kitName, $kitData));
 			} catch(InvalidConfigException $e) {
-				$this->plugin->getLogger()->warning("Could not load kit {$name} due to invalid config! Message: {$e->getMessage()}");
+				$this->plugin->getLogger()->warning("Could not load kit {$kitName} due to invalid config! Message: {$e->getMessage()}");
 			}
 		}
 	}
 
 	/**
-	 * @param string $name
-	 * @param string $display
-	 * @param array $items
-	 * @param Item|null $helmet
-	 * @param Item|null $chestplate
-	 * @param Item|null $leggings
-	 * @param Item|null $boots
-	 * @param array $effects
-	 * @param int $cooldown
+	 * @param Kit $kit
 	 */
-	public function addKit(string $name, string $display, array $items, Item $helmet = null, Item $chestplate = null, Item $leggings = null, Item $boots = null, array $effects = [], int $cooldown = 0) {
-		$this->kits[$name] = new Kit($name, $display, $items, $helmet, $chestplate, $leggings, $boots, $effects, $cooldown);
+	public function addKit(Kit $kit) {
+		$this->kits[$kit->getName()] = $kit;
 	}
 
 	/**
@@ -150,63 +142,6 @@ class KitManager {
 	 */
 	public function getKits() : array {
 		return $this->kits;
-	}
-
-	/**
-	 * @param array $itemData
-	 *
-	 * @return Item
-	 */
-	protected function parseItem(array $itemData) : Item {
-		$item = Item::get((int) $itemData["id"], (int) ($itemData["meta"] ?? 0), (int) ($itemData["count"] ?? 1));
-		$item->setCustomName(LanguageUtils::translateColors($itemData["name"] ?? ""));
-		array_map(function(Enchantment $enchantment) use ($item) {
-			$item->addEnchantment($enchantment);
-		}, array_map([$this, "parseEnchantment"], $itemData["enchantments"] ?? [])); // apply all enchantments to item
-		return $item;
-	}
-
-	/**
-	 * @param array $enchData
-	 *
-	 * @return Enchantment
-	 *
-	 * @throws InvalidConfigException
-	 */
-	protected function parseEnchantment(array $enchData) : Enchantment {
-		$ench = Enchantment::getEnchantmentByName($enchData["name"]);
-		if(!$ench instanceof Enchantment) throw new InvalidConfigException("Unknown enchantment name supplied for kit item! Value: " . $enchData["name"] ?? "NULL");
-		$ench->setLevel($enchData["level"] ?? 1);
-		return $ench;
-	}
-
-	/**
-	 * @param array $effectData
-	 *
-	 * @return Effect
-	 *
-	 * @throws InvalidConfigException
-	 */
-	protected function parseEffect(array $effectData) : Effect {
-		$effect = Effect::getEffectByName($effectData["name"]);
-		if(!$effect instanceof Effect) throw new InvalidConfigException("Unknown effect name supplied for kit effect! Value: " . $effectData["name"] ?? "NULL");
-		$effect->setDuration((int) ($effectData["time"] ?? 100));
-		$effect->setAmplifier((int) ($effectData["amplifier"] ?? 0));
-		return $effect;
-	}
-
-	/**
-	 * @param array $times
-	 *
-	 * @return int
-	 */
-	protected function parseCooldown(array $times) : int {
-		$seconds = (int) ($times["seconds"] ?? 0);
-		$seconds += (int) ($times["minutes"] ?? 0) * 60; // sixty seconds to a minute
-		$seconds += (int) ($times["hours"] ?? 0) * 3600; // 3,600 seconds to an hour
-		$seconds += (int) ($times["days"] ?? 0) * 86400; // 86,400 seconds to a day
-		$seconds += (int) ($times["weeks"] ?? 0) * 604800; // 604,800 seconds to a week
-		return $seconds;
 	}
 
 }

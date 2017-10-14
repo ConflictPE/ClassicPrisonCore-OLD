@@ -18,12 +18,12 @@
 
 namespace classicprison\area;
 
+use classicprison\area\types\MineArea;
 use classicprison\area\types\PvPArea;
 use classicprison\area\types\SafeArea;
 use classicprison\Main;
+use core\exception\InvalidConfigException;
 use core\Utils;
-use pocketmine\level\Level;
-use pocketmine\math\Vector3;
 
 class AreaManager {
 
@@ -47,8 +47,9 @@ class AreaManager {
 	public function __construct(Main $plugin) {
 		$this->plugin = $plugin;
 
-		$this->registerArea(SafeArea::class, true); // register the 'SafeArea' type
-		$this->registerArea(PvPArea::class, true); // register the 'PvPArea' type
+		$this->registerAreaType(MineArea::class, true); // register the 'MineArea' type
+		$this->registerAreaType(SafeArea::class, true); // register the 'SafeArea' type
+		$this->registerAreaType(PvPArea::class, true); // register the 'PvPArea' type
 
 		$this->registerFromData();
 
@@ -70,7 +71,7 @@ class AreaManager {
 	 *
 	 * @return bool
 	 */
-	public function registerArea(string $class, bool $force = false) {
+	public function registerAreaType(string $class, bool $force = false) {
 		if(is_a($class, BaseArea::class, true) and !($reflection = new \ReflectionClass($class))->isAbstract()) {
 			if(isset($this->knownTypes[$shortName = $reflection->getShortName()]) and !$force) {
 				return false;
@@ -80,26 +81,29 @@ class AreaManager {
 		return false;
 	}
 
+	/**
+	 * @param string $type
+	 *
+	 * @return string|null
+	 */
+	public function getKnownType(string $type) : ?string {
+		return $this->knownTypes[$type] ?? null;
+	}
+
 	public function registerFromData() {
 		$this->plugin->saveResource(self::AREAS_DATA_FILE_PATH);
-		foreach(json_decode(file_get_contents($this->plugin->getDataFolder() . self::AREAS_DATA_FILE_PATH), true) as $id => $data) {
+		foreach(json_decode(file_get_contents($this->plugin->getDataFolder() . self::AREAS_DATA_FILE_PATH), true) as $configId => $areaData) {
 			try {
-				$this->addArea(self::getType($data["type"]), $this->plugin->getServer()->getLevel($data["level"]) ?? $this->plugin->getServer()->getDefaultLevel(), Utils::parseVector($data["a"]), Utils::parseVector($data["b"]));
-			} catch(AreaException $e) {
-				$this->plugin->getLogger()->warning("Couldn't load area {$id}! Message: {$e->getMessage()}");
+				$this->addArea(BaseArea::fromData($areaData));
+			} catch(InvalidConfigException $e) {
+				$this->plugin->getLogger()->warning("Could not load area #{$configId} due to invalid config! Message: {$e->getMessage()}");
+				$this->plugin->getLogger()->logException($e);
 			}
 		}
 	}
 
-	public function addArea(string $type, Level $level, Vector3 $a, Vector3 $b) {
-		if(isset($this->knownTypes[$type])) {
-			$class = $this->knownTypes[$type];
-			/** @var BaseArea $area */
-			$area = new $class($this, $level, $a, $b);
-			$this->areaPool[$area->getId()] = $area;
-		} else {
-			throw new AreaException("Attempted to add arena with an unknown type! Type: {$type}");
-		}
+	public function addArea(BaseArea $area) {
+		$this->areaPool[$area->getId()] = $area;
 	}
 
 	/**
@@ -147,6 +151,8 @@ class AreaManager {
 			case "pvpzone":
 			case "pvparea":
 				return "PvPArea";
+			case "mine":
+				return "MineArea";
 			default:
 				return "SafeArea";
 		}

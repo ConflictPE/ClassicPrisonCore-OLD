@@ -18,12 +18,39 @@
 
 namespace classicprison\area;
 
+use classicprison\area\types\MineArea;
+use classicprison\area\types\PvPArea;
+use classicprison\area\types\SafeArea;
 use classicprison\ClassicPrisonPlayer;
+use classicprison\Main;
+use core\exception\InvalidConfigException;
+use core\Utils;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 
 abstract class BaseArea {
+
+	/**
+	 * Load an area from an array
+	 *
+	 * @param array $data
+	 *
+	 * @return BaseArea|MineArea|PvPArea|SafeArea
+	 */
+	public static function fromData(array $data) : BaseArea {
+		try {
+			$manager = Main::getInstance()->getAreaManager();
+
+			if(($type = $manager->getKnownType($data["type"])) === null) {
+				throw new InvalidConfigException("Attempted to add arena with an unknown type! Type: {$data["type"]}");
+			}
+
+			return new $type($manager, Utils::parseLevel($data["level"]), Utils::parseVector($data["a"]), Utils::parseVector($data["b"]));
+		} catch(\Throwable $e) {
+			throw new InvalidConfigException("Could not load area from data! Error: ". (new \ReflectionObject($e))->getShortName());
+		}
+	}
 
 	/** @var AreaManager */
 	private $manager;

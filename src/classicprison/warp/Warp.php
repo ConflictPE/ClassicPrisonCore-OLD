@@ -18,11 +18,29 @@
 
 namespace classicprison\warp;
 
+use core\exception\InvalidConfigException;
 use core\language\LanguageUtils;
+use core\Utils;
 use pocketmine\level\Position;
 use pocketmine\Player;
 
 class Warp {
+
+	/**
+	 * Load a warp from data
+	 *
+	 * @param string $name
+	 * @param array $data
+	 *
+	 * @return Warp
+	 */
+	public static function fromData(string $name, array $data) {
+		try {
+			return new Warp($name, $data["display"] ?? $name, Utils::parsePosition($data["pos"]), $data["aliases"] ?? [], $data["public"] ?? true, WarpManager::getWarpType($data["type"] ?? ""));
+		} catch(\Throwable $e) {
+			throw new InvalidConfigException("Could not load warp from data! (Error: ". (new \ReflectionObject($e))->getShortName() . ")");
+		}
+	}
 
 	const WARP_TYPE_GENERIC = 0x00;
 	const WARP_TYPE_MINE = 0x010;

@@ -32,7 +32,7 @@ use pocketmine\utils\Config;
 
 class NPCManager {
 
-	const DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "NPCs.json";
+	const DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "npcs.json";
 	const TYPE_COMMAND = "command";
 
 	/* Path to where the NPC data file is stored */

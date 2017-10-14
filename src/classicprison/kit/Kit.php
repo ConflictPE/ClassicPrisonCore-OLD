@@ -18,12 +18,30 @@
 
 namespace classicprison\kit;
 
+use core\exception\InvalidConfigException;
 use core\language\LanguageUtils;
+use core\Utils;
 use pocketmine\entity\Effect;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
 class Kit {
+
+	/**
+	 * Load a kit from an array
+	 *
+	 * @param string $name
+	 * @param array $data
+	 *
+	 * @return Kit
+	 */
+	public static function fromData(string $name, array $data) : Kit {
+		try {
+			return new Kit($name, $data["display"] ?? $name, array_map("core\Utils::parseItem", $data["items"]), Utils::parseItem($data["helmet"]), Utils::parseItem($data["chestplate"]), Utils::parseItem($data["leggings"]), Utils::parseItem($data["boots"]), array_map("core\Utils::parseEffect", $data["effects"]), Utils::parseCooldown($data["cooldown"]));
+		} catch(\Throwable $e) {
+			throw new InvalidConfigException("Could not load kit from data! Error: ". (new \ReflectionObject($e))->getShortName());
+		}
+	}
 
 	/** @var string */
 	private $name = "";

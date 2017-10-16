@@ -21,6 +21,7 @@ namespace classicprison\area\types;
 use classicprison\area\AreaManager;
 use classicprison\area\BaseArea;
 use classicprison\ClassicPrisonPlayer;
+use classicprison\mine\Mine;
 use core\language\LanguageUtils;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
@@ -28,19 +29,20 @@ use pocketmine\math\Vector3;
 class MineArea extends SafeArea {
 
 	/** @var string */
-	private $mineDisplay;
+	private $mineName;
 
-	public function __construct(AreaManager $manager, Level $level, Vector3 $a, Vector3 $b, string $mineDisplay) {
+	public function __construct(AreaManager $manager, Level $level, Vector3 $a, Vector3 $b, string $mineName) {
+		$this->mineName = $mineName;
 		parent::__construct($manager, $level, $a, $b);
 	}
 
-	public function getMineDisplay() : string {
-		return $this->mineDisplay;
+	public function getMine() : Mine{
+		return $this->getManager()->getPlugin()->getMineManager()->getMine($this->mineName);
 	}
 
 	public function onAreaEnter(ClassicPrisonPlayer $player, BaseArea $oldArea = null) {
-		if(!($oldArea instanceof MineArea and $oldArea->getMineDisplay() === $this->getMineDisplay())) {
-			$player->sendMessage(LanguageUtils::translateColors("&6- &aYou have entered &r{$this->mineDisplay}&r&a mine!"));
+		if(!($oldArea instanceof MineArea and $oldArea->getMine() === $this->getMine())) {
+			$player->sendMessage(LanguageUtils::translateColors("&6- &aYou have entered &r{$this->getMine()->getDisplay()}&r&a mine!"));
 		}
 	}
 

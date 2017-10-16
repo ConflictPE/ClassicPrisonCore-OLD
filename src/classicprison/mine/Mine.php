@@ -24,6 +24,7 @@ use classicprison\warp\Warp;
 use core\exception\InvalidConfigException;
 use core\language\LanguageUtils;
 use core\Utils;
+use pocketmine\level\Level;
 use pocketmine\level\Position;
 
 class Mine {
@@ -38,7 +39,7 @@ class Mine {
 	 */
 	public static function fromData(string $name, array $data) : Mine {
 		try {
-			return new Mine($name = strtolower($name), $display = LanguageUtils::translateColors($data["display"]), new MineArea(Main::getInstance()->getAreaManager(), Utils::parseLevel($data["level"]), Utils::parseVector($data["a"]), Utils::parseVector($data["b"]), $display), new Warp($name, $display, Utils::parsePosition($data["warp"])), $data["ratios"]);
+			return new Mine($name = strtolower($name), $display = LanguageUtils::translateColors($data["display"]), new MineArea(Main::getInstance()->getAreaManager(), Utils::parseLevel($data["level"]), Utils::parseVector($data["a"]), Utils::parseVector($data["b"]), $name), new Warp($name, $display, Utils::parsePosition($data["warp"])), $data["ratios"]);
 		} catch(\Throwable $e) {
 			throw new InvalidConfigException("Could not load mine from data! Error: ". (new \ReflectionObject($e))->getShortName());
 		}
@@ -96,6 +97,13 @@ class Mine {
 	}
 
 	/**
+	 * @return Level|null
+	 */
+	public function getLevel() : ?Level {
+		return $this->area->getLevel();
+	}
+
+	/**
 	 * @return Position
 	 */
 	public function getA() : Position {
@@ -106,7 +114,7 @@ class Mine {
 	 * @return Position
 	 */
 	public function getB() : Position {
-		return $this->area;
+		return $this->area->getB();
 	}
 
 	/**

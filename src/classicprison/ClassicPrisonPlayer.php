@@ -20,7 +20,7 @@ namespace classicprison;
 
 use classicprison\area\BaseArea;
 use core\CorePlayer;
-use pocketmine\utils\PluginException;
+use pocketmine\plugin\PluginException;
 
 class ClassicPrisonPlayer extends CorePlayer {
 

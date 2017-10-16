@@ -24,12 +24,13 @@ use classicprison\command\KitCommand;
 use classicprison\command\WarpCommand;
 use classicprison\entity\npc\NPCManager;
 use classicprison\kit\KitManager;
+use classicprison\mine\MineManager;
 use classicprison\warp\WarpManager;
 use pocketmine\item\Item;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use pocketmine\utils\PluginException;
+use pocketmine\plugin\PluginException;
 
 class Main extends PluginBase {
 
@@ -64,6 +65,9 @@ class Main extends PluginBase {
 
 	/** @var WarpManager */
 	private $warpManager;
+
+	/** @var MineManager */
+	private $mineManager;
 
 	/** Resource files & paths */
 	const MESSAGES_FILE_PATH = "lang" . DIRECTORY_SEPARATOR . "messages" . DIRECTORY_SEPARATOR;
@@ -112,6 +116,7 @@ class Main extends PluginBase {
 		$this->setKitManager();
 		$this->setWarpManager();
 		$this->setAreaManager();
+		$this->setMineManaer();
 		$this->setListener(); // register event listener last due to possible dependency on other components
 		$this->registerCommands(); // register commands last due to possible dependency on other components
 		$this->getServer()->getNetwork()->setName($components->getLanguageManager()->translate("SERVER_NAME", "en"));
@@ -202,6 +207,13 @@ class Main extends PluginBase {
 	}
 
 	/**
+	 * @return MineManager
+	 */
+	public function getMineManager() {
+		return $this->mineManager;
+	}
+
+	/**
 	 * Set the listener
 	 */
 	public function setListener() {
@@ -230,10 +242,17 @@ class Main extends PluginBase {
 	}
 
 	/**
-	 * set the area manager
+	 * Set the area manager
 	 */
 	public function setAreaManager() {
 		$this->areaManager = new AreaManager($this);
+	}
+
+	/**
+	 * Set the mine manager
+	 */
+	public function setMineManaer() {
+		$this->mineManager = new MineManager($this);
 	}
 
 }

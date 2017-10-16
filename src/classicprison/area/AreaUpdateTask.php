@@ -39,7 +39,7 @@ class AreaUpdateTask extends PluginTask {
 		return $this->manager;
 	}
 
-	public function onRun($currentTick) {
+	public function onRun(int $currentTick) {
 		$time = microtime(true);
 		/** @var ClassicPrisonPlayer $player */
 		foreach($this->getOwner()->getServer()->getOnlinePlayers() as $player) {

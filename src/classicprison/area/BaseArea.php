@@ -58,8 +58,8 @@ abstract class BaseArea {
 	/** @var int */
 	private $id;
 
-	/** @var Level */
-	private $level;
+	/** @var int */
+	private $levelId;
 
 	/** @var Position */
 	private $a;
@@ -70,7 +70,7 @@ abstract class BaseArea {
 	public function __construct(AreaManager $manager, Level $level, Vector3 $a, Vector3 $b) {
 		$this->manager = $manager;
 		$this->id = AreaManager::$areaCount++;
-		$this->level = $level;
+		$this->levelId = $level->getId();
 		$this->a = $a;
 		$this->b = $b;
 	}
@@ -83,8 +83,8 @@ abstract class BaseArea {
 		return $this->id;
 	}
 
-	public function getLevel() : Level {
-		return $this->level;
+	public function getLevel() : ?Level {
+		return $this->manager->getPlugin()->getServer()->getLevel($this->levelId);
 	}
 
 	public function getA() : Position {

@@ -61,4 +61,8 @@ class MineManager {
 		$this->plugin->getWarpManager()->addWarp($mine->getWarp());
 	}
 
+	public function getMine(string $name) : ?Mine {
+		return $this->minePool[strtolower($name)] ?? null;
+	}
+
 }

@@ -19,21 +19,14 @@
 namespace classicprison\rank;
 
 use classicprison\Main;
+use classicprison\util\traits\ClassicPrisonPluginReference;
 
 class RankManager {
 
-	/** @var Main */
-	private $plugin;
+	use ClassicPrisonPluginReference;
 
 	public function __construct(Main $plugin) {
-		$this->plugin = $plugin;
-	}
-
-	/**
-	 * @return Main
-	 */
-	public function getPlugin() : Main {
-		return $this->plugin;
+		$this->setClassicPrison($plugin);
 	}
 
 }

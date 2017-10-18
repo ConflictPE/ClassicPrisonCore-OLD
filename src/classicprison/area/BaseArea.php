@@ -84,7 +84,7 @@ abstract class BaseArea {
 	}
 
 	public function getLevel() : ?Level {
-		return $this->manager->getPlugin()->getServer()->getLevel($this->levelId);
+		return $this->manager->getClassicPrison()->getServer()->getLevel($this->levelId);
 	}
 
 	public function getA() : Position {
@@ -104,7 +104,7 @@ abstract class BaseArea {
 	 * @return bool
 	 */
 	public function within(Position $pos, bool $checkLevel = true) {
-		if($checkLevel and $pos->getLevel() !== $this->level) {
+		if($checkLevel and $pos->getLevel()->getId() !== $this->getLevel()->getId()) {
 			return false;
 		}
 		return (max($this->a->x, $this->b->x) <= $pos->x and min($this->a->x, $this->b->x) >= $pos->x) and (max($this->a->y, $this->b->y) <= $pos->y and min($this->a->y, $this->b->y) >= $pos->y) and (max($this->a->z, $this->b->z) <= $pos->z and min($this->a->z, $this->b->z) >= $pos->z);

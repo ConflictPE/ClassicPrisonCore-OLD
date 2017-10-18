@@ -19,46 +19,42 @@
 namespace classicprison\mine;
 
 use classicprison\Main;
+use classicprison\util\traits\ClassicPrisonPluginReference;
 use core\exception\InvalidConfigException;
 
 class MineManager {
 
-	const MINES_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "mines.json";
+	use ClassicPrisonPluginReference;
 
-	/** @var Main */
-	private $plugin;
+	const MINES_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "mines.json";
 
 	/** @var Mine[] */
 	private $minePool = [];
 
 	public function __construct(Main $plugin) {
-		$this->plugin = $plugin;
-	}
-
-	/**
-	 * @return Main
-	 */
-	public function getPlugin() : Main {
-		return $this->plugin;
+		$this->setClassicPrison($plugin);
 	}
 
 	public function registerFromData() {
-		$this->plugin->saveResource(self::MINES_DATA_FILE_PATH);
-		$data = json_decode(file_get_contents($this->plugin->getDataFolder() . self::MINES_DATA_FILE_PATH), true);
+		$plugin = $this->getClassicPrison();
+		$plugin->saveResource(self::MINES_DATA_FILE_PATH);
+		$data = json_decode(file_get_contents($plugin->getDataFolder() . self::MINES_DATA_FILE_PATH), true);
 		foreach($data as $mineName => $mineData) {
 			try {
 				$this->addMine(Mine::fromData(strtolower($mineName), $mineData));
 			} catch(InvalidConfigException $e) {
-				$this->plugin->getLogger()->warning("Could not load mine {$mineName} due to invalid config! Message: {$e->getMessage()}");
-				$this->plugin->getLogger()->logException($e);
+				$plugin->getLogger()->warning("Could not load mine {$mineName} due to invalid config! Message: {$e->getMessage()}");
+				$plugin->getLogger()->logException($e);
 			}
 		}
 	}
 
 	public function addMine(Mine $mine) {
 		$this->minePool[$mine->getName()] = $mine;
-		$this->plugin->getAreaManager()->addArea($mine->getArea());
-		$this->plugin->getWarpManager()->addWarp($mine->getWarp());
+
+		$plugin = $this->getClassicPrison();
+		$plugin->getAreaManager()->addArea($mine->getArea());
+		$plugin->getWarpManager()->addWarp($mine->getWarp());
 	}
 
 	public function getMine(string $name) : ?Mine {

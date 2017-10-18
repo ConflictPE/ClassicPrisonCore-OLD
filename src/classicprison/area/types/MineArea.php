@@ -41,7 +41,7 @@ class MineArea extends SafeArea {
 	}
 
 	public function onAreaEnter(ClassicPrisonPlayer $player, BaseArea $oldArea = null) {
-		if(!($oldArea instanceof MineArea and $oldArea->getMine() === $this->getMine())) {
+		if(!($oldArea instanceof MineArea and $oldArea->getMine()->getName() === $this->getMine()->getName())) {
 			$player->sendMessage(LanguageUtils::translateColors("&6- &aYou have entered &r{$this->getMine()->getDisplay()}&r&a mine!"));
 		}
 	}

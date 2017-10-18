@@ -19,13 +19,13 @@
 namespace classicprison\warp;
 
 use classicprison\Main;
+use classicprison\util\traits\ClassicPrisonPluginReference;
 use classicprison\warp\exception\WarpException;
 use core\exception\InvalidConfigException;
 
 class WarpManager {
 
-	/** @var Main */
-	private $plugin;
+	use ClassicPrisonPluginReference;
 
 	/** @var Warp[] */
 	private $warps = [];
@@ -34,7 +34,7 @@ class WarpManager {
 	const WARPS_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "warps.json";
 
 	public function __construct(Main $plugin) {
-		$this->plugin = $plugin;
+		$this->setClassicPrison($plugin);
 
 		$this->registerFromData();
 	}
@@ -47,15 +47,16 @@ class WarpManager {
 	}
 
 	private function registerFromData() {
-		$this->plugin->saveResource(self::WARPS_DATA_FILE_PATH);
-		foreach(json_decode(file_get_contents($this->plugin->getDataFolder() . self::WARPS_DATA_FILE_PATH), true) as $warpName => $warpData) {
+		$plugin = $this->getClassicPrison();
+		$plugin->saveResource(self::WARPS_DATA_FILE_PATH);
+		foreach(json_decode(file_get_contents($plugin->getDataFolder() . self::WARPS_DATA_FILE_PATH), true) as $warpName => $warpData) {
 			try {
 				$this->addWarp(Warp::fromData(strtolower($warpName), $warpData));
 			} catch(InvalidConfigException $e) { // if there is an error loading a warp from the config data
-				$this->plugin->getLogger()->warning("Could not load warp {$warpName} due to invalid config! Message: {$e->getMessage()}");
-				$this->plugin->getLogger()->logException($e);
+				$plugin->getLogger()->warning("Could not load warp {$warpName} due to invalid config! Message: {$e->getMessage()}");
+				$plugin->getLogger()->logException($e);
 			} catch(WarpException $e) { // if there is a problem registering the warp
-				$this->plugin->getLogger()->debug($e->getMessage());
+				$plugin->getLogger()->debug($e->getMessage());
 			}
 		}
 	}

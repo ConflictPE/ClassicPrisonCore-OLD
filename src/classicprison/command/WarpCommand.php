@@ -19,6 +19,7 @@
 namespace classicprison\command;
 
 use classicprison\Main;
+use classicprison\util\traits\ClassicPrisonPluginReference;
 use classicprison\warp\Warp;
 use core\command\CoreUserCommand;
 use core\CorePlayer;
@@ -26,12 +27,15 @@ use core\language\LanguageUtils;
 
 class WarpCommand extends CoreUserCommand {
 
+	use ClassicPrisonPluginReference;
+
 	public function __construct(Main $plugin) {
+		$this->setClassicPrison($plugin);
 		parent::__construct($plugin->getCore(), "warp", "Warp command", "/warp [mines|list|{warp name}]", ["warps"]);
 	}
 
 	public function onRun(CorePlayer $player, array $args) {
-		$warpManager = Main::getInstance()->getWarpManager();
+		$warpManager = $this->getClassicPrison()->getWarpManager();
 		if(isset($args[0])) { // targeting a specific warp
 			switch($warpName = strtolower($args[0])) {
 				case "mines":

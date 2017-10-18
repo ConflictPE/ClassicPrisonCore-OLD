@@ -22,13 +22,13 @@ use classicprison\area\types\MineArea;
 use classicprison\area\types\PvPArea;
 use classicprison\area\types\SafeArea;
 use classicprison\Main;
+use classicprison\util\traits\ClassicPrisonPluginReference;
 use core\exception\InvalidConfigException;
 use core\Utils;
 
 class AreaManager {
 
-	/** @var Main */
-	private $plugin;
+	use ClassicPrisonPluginReference;
 
 	/** @var string[] */
 	private $knownTypes = [];
@@ -45,7 +45,7 @@ class AreaManager {
 	const AREAS_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "areas.json";
 
 	public function __construct(Main $plugin) {
-		$this->plugin = $plugin;
+		$this->setClassicPrison($plugin);
 
 		$this->registerAreaType(MineArea::class, true); // register the 'MineArea' type
 		$this->registerAreaType(SafeArea::class, true); // register the 'SafeArea' type
@@ -91,13 +91,14 @@ class AreaManager {
 	}
 
 	public function registerFromData() {
-		$this->plugin->saveResource(self::AREAS_DATA_FILE_PATH);
-		foreach(json_decode(file_get_contents($this->plugin->getDataFolder() . self::AREAS_DATA_FILE_PATH), true) as $configId => $areaData) {
+		$plugin = $this->getClassicPrison();
+		$plugin->saveResource(self::AREAS_DATA_FILE_PATH);
+		foreach(json_decode(file_get_contents($plugin->getDataFolder() . self::AREAS_DATA_FILE_PATH), true) as $configId => $areaData) {
 			try {
 				$this->addArea(BaseArea::fromData($areaData));
 			} catch(InvalidConfigException $e) {
-				$this->plugin->getLogger()->warning("Could not load area #{$configId} due to invalid config! Message: {$e->getMessage()}");
-				$this->plugin->getLogger()->logException($e);
+				$plugin->getLogger()->warning("Could not load area #{$configId} due to invalid config! Message: {$e->getMessage()}");
+				$plugin->getLogger()->logException($e);
 			}
 		}
 	}

@@ -19,17 +19,13 @@
 namespace classicprison\kit;
 
 use classicprison\Main;
+use classicprison\util\traits\ClassicPrisonPluginReference;
 use core\exception\InvalidConfigException;
-use core\language\LanguageUtils;
-use pocketmine\entity\Effect;
-use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\Item;
 use pocketmine\scheduler\FileWriteTask;
 
 class KitManager {
 
-	/** @var Main */
-	private $plugin;
+	use ClassicPrisonPluginReference;
 
 	/** @var Kit[] */
 	private $kits = [];
@@ -41,7 +37,7 @@ class KitManager {
 	const COOLDOWN_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "cooldowns.sl";
 
 	public function __construct(Main $plugin) {
-		$this->plugin = $plugin;
+		$this->setClassicPrison($plugin);
 
 		$this->registerFromData();
 		$this->loadKitCooldowns();

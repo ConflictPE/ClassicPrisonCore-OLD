@@ -21,18 +21,22 @@ namespace classicprison\command;
 use classicprison\ClassicPrisonPlayer;
 use classicprison\kit\Kit;
 use classicprison\Main;
+use classicprison\util\traits\ClassicPrisonPluginReference;
 use core\command\CoreUserCommand;
 use core\CorePlayer;
 use core\language\LanguageUtils;
 
 class KitCommand extends CoreUserCommand {
 
+	use ClassicPrisonPluginReference;
+
 	public function __construct(Main $plugin) {
+		$this->setClassicPrison($plugin);
 		parent::__construct($plugin->getCore(), "kit", "Main kit command", "/kit [kit name]", ["kits"]);
 	}
 
 	public function onRun(CorePlayer $player, array $args) {
-		$kitManager = Main::getInstance()->getKitManager();
+		$kitManager = $this->getClassicPrison()->getKitManager();
 		/** @var ClassicPrisonPlayer $player */
 		if(isset($args[0])) { // user is trying to apply a kit
 			if($kitManager->kitExists(strtolower($args[0]))) {

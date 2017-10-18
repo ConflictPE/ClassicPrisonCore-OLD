@@ -19,25 +19,19 @@
 namespace classicprison\crates;
 
 use classicprison\Main;
+use classicprison\util\traits\ClassicPrisonPluginReference;
 
 class CrateManager {
 
-	/** @var Main */
-	private $plugin;
-	
+	use ClassicPrisonPluginReference;
+
 	private $cratesPool = [];
 
 	const CRATES_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "crates.json";
 
 	public function __construct(Main $plugin) {
+		$this->setClassicPrison($plugin);
 		$this->plugin = $plugin;
-	}
-
-	/**
-	 * @return Main
-	 */
-	public function getPlugin() : Main {
-		return $this->plugin;
 	}
 
 }

@@ -19,18 +19,22 @@ namespace classicprison\command;
 
 use classicprison\ClassicPrisonPlayer;
 use classicprison\Main;
+use classicprison\util\traits\ClassicPrisonPluginReference;
 use core\command\CoreUserCommand;
 use core\CorePlayer;
 
 class HubCommand extends CoreUserCommand {
 
+	use ClassicPrisonPluginReference;
+
 	public function __construct(Main $plugin) {
+		$this->setClassicPrison($plugin);
 		parent::__construct($plugin->getCore(), "hub", "Returns you to the hub", "/hub", ["spawn", "lobby"]);
 	}
 
 	public function onRun(CorePlayer $player, array $args) {
 		/** @var ClassicPrisonPlayer $player */
-		$player->teleport($this->getPlugin()->getServer()->getDefaultLevel()->getSafeSpawn());
+		$player->teleport($this->getClassicPrison()->getServer()->getDefaultLevel()->getSafeSpawn());
 		$player->sendTranslatedMessage("HUB_COMMAND", [], true);
 		return true;
 	}

@@ -42,8 +42,6 @@ class ClassicPrisonListener implements Listener {
 		return $this->plugin;
 	}
 
-	public function onJoin(PlayerJoinEvent $event) {}
-
 	/**
 	 * @param PlayerCreationEvent $event
 	 *
@@ -51,24 +49,6 @@ class ClassicPrisonListener implements Listener {
 	 */
 	public function onPlayerCreation(PlayerCreationEvent $event) {
 		$event->setPlayerClass(ClassicPrisonPlayer::class);
-	}
-
-	/**
-	 * @param PlayerDeathEvent $event
-	 */
-	public function onDeath(PlayerDeathEvent $event) {
-		$event->setDeathMessage("");
-		$event->setDrops([]);
-	}
-
-	public function onQuit(PlayerQuitEvent $event) {
-		$player = $event->getPlayer();
-		$player->kill();
-	}
-
-	public function onKick(PlayerKickEvent $event) {
-		$player = $event->getPlayer();
-		$player->kill();
 	}
 
 }

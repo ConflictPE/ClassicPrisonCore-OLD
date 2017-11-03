@@ -1,14 +1,14 @@
 {
-	"WELCOME": "&l&6»&7-----------*+*-----------&6«&r \n&r&l&6Conflict&7PE &fHub&r\n&3Welcome back, &b{args1}&3!&r\n&l&6»&7-----------*+*-----------&6«",
+	"WELCOME": "&l&6»&7-----------*+*-----------&6«&r \n&r&l&6Conflict&7PE &fPrison&r\n&3Welcome back, &b{args1}&3!&r\n&l&6»&7-----------*+*-----------&6«",
 	"REGISTER_PROMPT": "&l&a|&7||&r &6Type a password directly into chat to register.",
 	"LOGIN_PROMPT": "&e> &6Type your password directly into chat to login.",
 	"CONFIRM_PASSWORD_PROMPT": "&l&a||&7|&r &ePlease type your password into chat again to confirm.",
 	"EMAIL_PROMPT": "&l&a|||&r &ePlease enter your email directly into chat to finish the registration process.",
 
 
-	"SERVER_NAME": "&l&6C&7PE&r Server",
+	"SERVER_NAME": "&l&6C&7PE&r Prison",
 
-	"ONE_MINUTE_UNTIL_RESTART": "&6- &eServer will restart in &a1 minute&e!",
+	"ONE_MINUTE_UNTIL_RESTART": "&6- &ePrison will restart in &a1 minute&e!",
 	"SECONDS_UNTIL_RESTART": "&l&fPrison &r&erestarting in &a{args1} second('s)&e!",
-	"SERVER_RESTART": "&l&6Conflict&7PE &fServer &r&eis restarting, we will be back in a moment!"
+	"SERVER_RESTART": "&l&6Conflict&7PE &fPrison &r&eis restarting, we will be back in a moment!"
 }

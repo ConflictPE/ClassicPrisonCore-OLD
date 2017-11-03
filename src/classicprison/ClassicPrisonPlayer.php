@@ -29,6 +29,7 @@ use pocketmine\network\protocol\ContainerSetSlotPacket;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\v120\InventoryContentPacket;
 use pocketmine\network\protocol\v120\InventorySlotPacket;
+use pocketmine\Player;
 use pocketmine\utils\PluginException;
 
 class ClassicPrisonPlayer extends CorePlayer {
@@ -125,5 +126,9 @@ class ClassicPrisonPlayer extends CorePlayer {
 		}
 
 		return parent::dataPacket($packet, $needACK);
+	}
+
+	public function sendCommandData() {
+		Player::sendCommandData();
 	}
 }

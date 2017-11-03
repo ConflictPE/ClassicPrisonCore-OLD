@@ -46,7 +46,7 @@ class Main extends PluginBase {
 		"en" => "english.json"
 	];
 
-	const MESSAGES_FILE_PATH = "lang" . DIRECTORY_SEPARATOR . "messages" . DIRECTORY_SEPARATOR;
+	const MESSAGES_FILE_PATH = "messages" . DIRECTORY_SEPARATOR;
 
 	public function onEnable() {
 		Main::$instance = $this;
@@ -61,13 +61,15 @@ class Main extends PluginBase {
 	}
 
 	public function loadConfigs() {
+		if(!is_dir($this->getDataFolder())) @mkdir($this->getDataFolder());
+		$msgPath = $this->getDataFolder() . self::MESSAGES_FILE_PATH;
+		if(!is_dir($msgPath)) @mkdir($msgPath);
+
 		$this->saveResource("Settings.yml");
 		$this->settings = new Config($this->getDataFolder() . "Settings.yml",  Config::YAML);
 
-		$path = $this->getDataFolder() . self::MESSAGES_FILE_PATH;
-		if(!is_dir($path)) @mkdir($path);
 		foreach(self::$languages as $lang => $filename) {
-			$file = $path . $filename;
+			$file = $msgPath . $filename;
 			$this->saveResource(self::MESSAGES_FILE_PATH . $filename);
 			if(!is_file($file)) {
 				$this->getLogger()->notice("Couldn't find language file for '{$lang}'!\nPath: {$file}");

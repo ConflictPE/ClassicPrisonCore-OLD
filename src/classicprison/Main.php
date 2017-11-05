@@ -50,7 +50,6 @@ class Main extends PluginBase {
 
 	public function onEnable() {
 		Main::$instance = $this;
-		Utils::$centerWelcome = true;
 
 		$components = $this->getServer()->getPluginManager()->getPlugin("Components");
 		if(!$components instanceof \core\Main) throw new PluginException("Components plugin isn't loaded!");

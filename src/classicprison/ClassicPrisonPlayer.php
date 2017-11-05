@@ -129,6 +129,10 @@ class ClassicPrisonPlayer extends CorePlayer {
 		}
 	}
 
+	public function kill($forReal = false) {
+		return Player::kill();
+	}
+
 	/**
 	 * Mask the players inventory until they're authenticated
 	 *

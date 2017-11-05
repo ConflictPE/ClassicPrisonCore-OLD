@@ -62,6 +62,8 @@ class ClassicPrisonPlayer extends CorePlayer {
 		parent::setAuthenticated($authenticated);
 
 		$this->sendAllInventories();
+
+		$this->setStatus(self::STATE_PLAYING); // let other plugins handle things like damage once authenticated
 	}
 
 	public function messageCheckCallback(string $message) {

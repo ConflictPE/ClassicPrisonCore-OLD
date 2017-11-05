@@ -1,5 +1,5 @@
 {
-	"WELCOME": "&l&6»&7-------------*+*-------------&6«\n&l&6Conflict&7PE &fPrison\n&3Welcome back, &b{args1}&3!\n&l&6»&7-------------*+*-------------&6«\n    ",
+	"WELCOME": "&l&6»&7-------------*+*-------------&6«\n&l&6Conflict&7PE &fPrison\n&3Welcome back, &b{args1}&e!\n&l&6»&7-------------*+*-------------&6«\n    ",
 	"WELCOME_TITLE": "&e&k||&r &l&6Conflict&7PE &fPrison&r &e&k||",
 	"WELCOME_SUBTITLE": "&7Mine your way to freedom!",
 	"REGISTER_PROMPT": "&l&a|&7||&r &6Type a password directly into chat to register.",

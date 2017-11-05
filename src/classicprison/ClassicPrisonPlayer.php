@@ -19,6 +19,7 @@
 namespace classicprison;
 
 use core\CorePlayer;
+use core\language\LanguageUtils;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\player\PlayerChatEvent;
@@ -27,10 +28,12 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\ContainerSetSlotPacket;
 use pocketmine\network\protocol\DataPacket;
+use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\network\protocol\v120\InventoryContentPacket;
 use pocketmine\network\protocol\v120\InventorySlotPacket;
 use pocketmine\Player;
 use pocketmine\utils\PluginException;
+use pocketmine\utils\TextFormat;
 
 class ClassicPrisonPlayer extends CorePlayer {
 
@@ -79,6 +82,18 @@ class ClassicPrisonPlayer extends CorePlayer {
 		foreach($this->getServer()->getOnlinePlayers() as $p) {
 			$p->sendMessage($baseMessage);
 		}
+	}
+
+	public function afterAuthCheck() {
+		$this->addTitle(LanguageUtils::translateColors("&eWelcome to &r&l&6Conflict&7PE &fPrison&r&e!"), TextFormat::GRAY . ($this->isAuthenticated() ? "Do /mines to start mining!" : ($this->isRegistered() ? "Login to start playing!" : "Follow the prompts to register!")), 10, 100, 10);
+
+		$pk = new LevelEventPacket();
+		$pk->x = $this->x;
+		$pk->y = $this->y;
+		$pk->z = $this->z;
+		$pk->evid = LevelEventPacket::EVENT_SOUND_CLICK_FAIL;
+		$pk->data = 0;
+		$this->dataPacket($pk);
 	}
 
 	public function onChat(PlayerChatEvent $event) {

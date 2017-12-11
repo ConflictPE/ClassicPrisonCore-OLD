@@ -16,7 +16,7 @@
  *
  */
 
-namespace conflict\classicprison\crates;
+namespace conflict\classicprison\crate;
 
 use conflict\classicprison\Main;
 use conflict\classicprison\util\traits\ClassicPrisonPluginReference;
@@ -27,11 +27,25 @@ class CrateManager {
 
 	private $cratesPool = [];
 
-	const CRATES_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "crates.json";
+	const CRATES_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "crate.json";
 
 	public function __construct(Main $plugin) {
 		$this->setClassicPrison($plugin);
-		$this->plugin = $plugin;
 	}
 
+	public function addCrate() {
+
+	}
+
+	public function getCrates() {
+
+	}
+
+	public function getCrate() {
+
+	}
+
+	public function crateExists() {
+
+	}
 }

@@ -7,12 +7,12 @@
     <orderEntry type="module-library">
       <library name="PHP" type="php">
         <CLASSES>
+          <root url="file://$MODULE_DIR$/../../Server Software/Extropy" />
           <root url="file://$USER_HOME$/Documents/CrazedCraft/Components" />
-          <root url="file://$USER_HOME$/Documents/PMMP/PocketMine-MP" />
         </CLASSES>
         <SOURCES>
+          <root url="file://$MODULE_DIR$/../../Server Software/Extropy" />
           <root url="file://$USER_HOME$/Documents/CrazedCraft/Components" />
-          <root url="file://$USER_HOME$/Documents/PMMP/PocketMine-MP" />
         </SOURCES>
       </library>
     </orderEntry>

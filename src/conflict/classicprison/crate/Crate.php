@@ -18,6 +18,48 @@
 
 namespace conflict\classicprison\crate;
 
+use conflict\classicprison\crate\loot\BaseLoot;
+use conflict\classicprison\Main;
+use core\exception\InvalidConfigException;
+
 class Crate {
+
+	public static function fromData(array $data) : Crate {
+		try {
+			$manager = Main::getInstance()->getCrateManager();
+		} catch(\Throwable $e) {
+			throw new InvalidConfigException("Could not load crate from data! Error: ". (new \ReflectionObject($e))->getShortName());
+		}
+	}
+
+	/** @var CrateManager */
+	private $manager;
+
+	/** @var BaseLoot[] */
+	private $lootPool = [];
+
+	public function __construct(CrateManager $manager) {
+		$this->manager = $manager;
+	}
+
+	public function getManager() : CrateManager {
+		return $this->manager;
+	}
+
+	/**
+	 * Add loot to the pool
+	 *
+	 * @param BaseLoot $loot
+	 */
+	public function addLoot(BaseLoot $loot) {
+		$this->lootPool[] = $loot;
+	}
+
+	/**
+	 * @return BaseLoot[]
+	 */
+	public function getLoot() : array {
+		return $this->lootPool;
+	}
 
 }

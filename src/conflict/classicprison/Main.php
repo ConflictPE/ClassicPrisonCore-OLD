@@ -22,6 +22,7 @@ use conflict\classicprison\area\AreaManager;
 use conflict\classicprison\command\HubCommand;
 use conflict\classicprison\command\KitCommand;
 use conflict\classicprison\command\WarpCommand;
+use conflict\classicprison\crate\CrateManager;
 use conflict\classicprison\entity\npc\NPCManager;
 use conflict\classicprison\kit\KitManager;
 use conflict\classicprison\mine\MineManager;
@@ -69,6 +70,9 @@ class Main extends PluginBase {
 	/** @var MineManager */
 	private $mineManager;
 
+	/** @var CrateManager */
+	private $crateManager;
+
 	/** Resource files & paths */
 	const MESSAGES_FILE_PATH = "lang" . DIRECTORY_SEPARATOR . "messages" . DIRECTORY_SEPARATOR;
 	const MINES_DATA_FILE = "data" . DIRECTORY_SEPARATOR . "mines.json";
@@ -111,12 +115,15 @@ class Main extends PluginBase {
 		if(!$components instanceof \core\Main)
 			throw new PluginException("Components plugin isn't loaded!");
 		$this->components = $components;
+
 		$this->loadConfigs();
 		$this->setNpcManager();
 		$this->setKitManager();
 		$this->setWarpManager();
 		$this->setAreaManager();
-		$this->setMineManaer();
+		$this->setMineManager();
+		$this->setCrateManager();
+
 		$this->setListener(); // register event listener last due to possible dependency on other components
 		$this->registerCommands(); // register commands last due to possible dependency on other components
 		$this->getServer()->getNetwork()->setName($components->getLanguageManager()->translate("SERVER_NAME", "en"));
@@ -214,6 +221,13 @@ class Main extends PluginBase {
 	}
 
 	/**
+	 * @return CrateManager
+	 */
+	public function getCrateManager() {
+		return $this->crateManager;
+	}
+
+	/**
 	 * Set the listener
 	 */
 	public function setListener() {
@@ -251,8 +265,15 @@ class Main extends PluginBase {
 	/**
 	 * Set the mine manager
 	 */
-	public function setMineManaer() {
+	public function setMineManager() {
 		$this->mineManager = new MineManager($this);
+	}
+
+	/**
+	 * Set the crate manager
+	 */
+	public function setCrateManager() {
+		$this->crateManager = new CrateManager($this);
 	}
 
 }

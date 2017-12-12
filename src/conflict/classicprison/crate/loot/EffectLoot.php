@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ClassicPrisonCore – EffectLoot.php
  *
@@ -17,6 +18,27 @@
 
 namespace conflict\classicprison\crate\loot;
 
-class EffectLoot {
+use conflict\classicprison\ClassicPrisonPlayer;
+use pocketmine\entity\Effect;
+use pocketmine\item\Item;
+
+class EffectLoot extends BaseLoot {
+
+	/** @var Effect */
+	private $effect;
+
+	public function __construct($name, Effect $effect, Item $display) {
+		$this->effect = $effect;
+		parent::__construct($name, $display);
+	}
+
+	public function getLootType() : string {
+		return "Effect";
+	}
+
+	public function applyLoot(ClassicPrisonPlayer $player) : bool {
+		$player->addEffect($this->effect);
+		return true;
+	}
 
 }

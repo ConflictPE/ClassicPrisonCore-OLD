@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ClassicPrisonCore – MoneyLoot.php
  *

@@ -26,9 +26,8 @@ class ItemLoot extends BaseLoot {
 	/** @var Item */
 	protected $loot;
 
-	public function __construct($name, Item $loot) {
+	public function __construct($name, Item $loot, Item $display) {
 		$this->loot = $loot;
-		$display = clone $loot;
 		parent::__construct($name, $display);
 	}
 

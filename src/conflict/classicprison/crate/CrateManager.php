@@ -37,6 +37,9 @@ class CrateManager {
 	/** @var Crate[] */
 	private $cratesPool = [];
 
+	/** @var int */
+	public static $crateCount = 0;
+
 	const CRATES_DATA_FILE_PATH = "data" . DIRECTORY_SEPARATOR . "crates.json";
 
 	public function __construct(Main $plugin) {

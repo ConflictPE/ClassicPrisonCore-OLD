@@ -21,6 +21,7 @@ namespace conflict\classicprison\crate;
 use conflict\classicprison\crate\loot\BaseLoot;
 use conflict\classicprison\Main;
 use core\exception\InvalidConfigException;
+use pocketmine\level\Position;
 
 class Crate {
 
@@ -35,13 +36,25 @@ class Crate {
 	/** @var CrateManager */
 	private $manager;
 
+	/** @var int */
+	private $id;
+
+	/** @var Position */
+	private $pos;
+
 	/** @var BaseLoot[] */
 	private $lootPool = [];
 
-	public function __construct(CrateManager $manager) {
+	public function __construct(CrateManager $manager, Position $pos, array $loot) {
 		$this->manager = $manager;
+		$this->id = CrateManager::$crateCount++;
+		$this->pos = $pos;
+		$this->lootPool = $loot;
 	}
 
+	/**
+	 * @return CrateManager
+	 */
 	public function getManager() : CrateManager {
 		return $this->manager;
 	}
